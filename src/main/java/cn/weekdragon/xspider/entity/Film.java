@@ -8,11 +8,14 @@ public class Film {
 	
 	private int webSiteFlag;
 	
-	private String fullTile;
+	private String fullTitle;
 	private String shortTitle;
 	private String showTime;
 	private String category;
+	private String rank;
+	
 	private String comment;
+	private String imgUrl;
 	private String detailUrl;
 	private int commentType;
 	private String prize;
@@ -30,11 +33,11 @@ public class Film {
 	public void setWebSiteFlag(int webSiteFlag) {
 		this.webSiteFlag = webSiteFlag;
 	}
-	public String getFullTile() {
-		return fullTile;
+	public String getFullTitle() {
+		return fullTitle;
 	}
-	public void setFullTile(String fullTile) {
-		this.fullTile = fullTile;
+	public void setFullTitle(String fullTitle) {
+		this.fullTitle = fullTitle;
 	}
 	public String getShortTitle() {
 		return shortTitle;
@@ -90,9 +93,22 @@ public class Film {
 	public void setSourceUrl(List<String> sourceUrl) {
 		this.sourceUrl = sourceUrl;
 	}
+	public String getRank() {
+		return rank;
+	}
+	public void setRank(String rank) {
+		this.rank = rank;
+	}
+	
+	public String getImgUrl() {
+		return imgUrl;
+	}
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
+	}
 	@Override
 	public String toString() {
-		return "Film [id=" + id + ", webSiteFlag=" + webSiteFlag + ", fullTile=" + fullTile + ", shortTitle="
+		return "Film [id=" + id + ", webSiteFlag=" + webSiteFlag + ", fullTile=" + fullTitle + ", shortTitle="
 				+ shortTitle + ", showTime=" + showTime + ", category=" + category + ", comment=" + comment
 				+ ", detailUrl=" + detailUrl + ", commentType=" + commentType + ", prize=" + prize + ", isRecomended="
 				+ isRecomended + ", sourceUrl=" + sourceUrl + "]";

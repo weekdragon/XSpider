@@ -31,7 +31,7 @@ public class PNiaoSpider implements ISpider{
 		int lastIndexOf = currentPageUrl.lastIndexOf("/");
 		String nextPageUrl = null;
 		if(pageIndex<pageTotal) {
-			nextPageUrl = currentPageUrl.substring(0, lastIndexOf)+"pn" + ++pageIndex + ".html";
+			//nextPageUrl = currentPageUrl.substring(0, lastIndexOf)+"/pn" + ++pageIndex + ".html";
 		}
 		return nextPageUrl;
 	}
@@ -41,19 +41,20 @@ public class PNiaoSpider implements ISpider{
 	public void firstGetAll() throws Exception {
 		currentPageUrl = listBegin;
 		while(currentPageUrl!=null) {
+			log.info("访问页面{url = {}, index = {}, total = {}}",currentPageUrl,pageIndex,pageTotal);
 			Document doc = Jsoup.connect(currentPageUrl).get();
 			//
-			Elements totalNum = doc.select("div.mainPage > li(10)");
-			System.out.println(totalNum);
-			String href = totalNum.attr("href");
-			Pattern num = Pattern.compile("\\d.");
-			Matcher matcher = num.matcher(href);
-			if(matcher.find()) {
-				pageTotal = Integer.parseInt(matcher.group());
-				System.out.println(pageTotal);
+			if(pageTotal == -1) {
+				Element totalNum = doc.select("div.mainPage :nth-child(10)").first();
+				String href = totalNum.toString();
+				System.out.println("总数："+href);
+				Pattern num = Pattern.compile("\\d+");
+				Matcher matcher = num.matcher(href);
+				if(matcher.find()) {
+					pageTotal = Integer.parseInt(matcher.group());
+					System.out.println(pageTotal);
+				}
 			}
-			
-			Elements select = doc.select("#main_outer > div.mainContainer > div.movies");
 			Elements moviesContainer = doc.select("#main_outer > div.mainContainer > div.movies");
 			List movies = moviesContainer.select("div.eachOne");
 			if( movies == null) {
@@ -71,13 +72,31 @@ public class PNiaoSpider implements ISpider{
 				}
 				String title = titleAndDetail.text();
 				String detailUrl = titleAndDetail.attr("href");
+				Element info = movie.select("div.info").first();
+				String showTime = info.select(":nth-child(2)").first().select("a").first().text();
+				
+				String categorys = info.select("li[class!=year]:has(a[rel])").text();
+				Element bottomInfo = movie.select("div.bottomInfo").first();
+				String rank = bottomInfo.select("div.leftInfo > li:eq(0)").text();
+				
+				String imgUrl = movie.select("div.left > div.thumb > a > img").first().attr("data-url");
+				
+				if(true)return;
 				Film film = new Film();
-				film.setFullTile(title);
+				film.setFullTitle(title);
+				film.setShortTitle(title);
 				film.setDetailUrl(detailUrl);
+				if(showTime.length()==11) {
+					film.setShowTime(showTime);
+				}
+				film.setCategory(categorys);
+				film.setRank(rank);
+				film.setImgUrl(imgUrl);
+				
 				System.out.println(film);
 			});
 			currentPageUrl=getNextPageUrl();
-			System.out.println(currentPageUrl);
+			log.info("下一页面:{}",currentPageUrl);
 		}
 	}
 
