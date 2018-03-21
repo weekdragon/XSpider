@@ -1,30 +1,69 @@
-package cn.weekdragon.xspider.entity;
+package cn.weekdragon.xspider.domain;
 
 import java.util.List;
 
-public class Film {
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-	private int id;
-	
+@Entity
+public class Film {
+	@Id  // 主键
+    @GeneratedValue(strategy=GenerationType.IDENTITY) // 自增长策略
+	private Long id;
 	private int webSiteFlag;
-	
+	@Column(nullable = false) //全名
 	private String fullTitle;
+	@Column
 	private String shortTitle;
+	@Column
 	private String showTime;
+	@Column
 	private String category;
-	private String rank;
-	
-	private String comment;
+	@Column
 	private String imgUrl;
+	@Column
+	private String rank;
+	@Column
+	private String comment;
+	@Column
 	private String detailUrl;
+	@Column
 	private int commentType;
+	@Column
 	private String prize;
+	@Column
 	private boolean isRecomended;
+	@ElementCollection
 	private List<String> sourceUrl;
-	public int getId() {
+	
+	
+	
+	public String getImgUrl() {
+		return imgUrl;
+	}
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
+	}
+	public String getFullTitle() {
+		return fullTitle;
+	}
+	public void setFullTitle(String fullTitle) {
+		this.fullTitle = fullTitle;
+	}
+	public String getRank() {
+		return rank;
+	}
+	public void setRank(String rank) {
+		this.rank = rank;
+	}
+	public Long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public int getWebSiteFlag() {
@@ -32,12 +71,6 @@ public class Film {
 	}
 	public void setWebSiteFlag(int webSiteFlag) {
 		this.webSiteFlag = webSiteFlag;
-	}
-	public String getFullTitle() {
-		return fullTitle;
-	}
-	public void setFullTitle(String fullTitle) {
-		this.fullTitle = fullTitle;
 	}
 	public String getShortTitle() {
 		return shortTitle;
@@ -93,19 +126,6 @@ public class Film {
 	public void setSourceUrl(List<String> sourceUrl) {
 		this.sourceUrl = sourceUrl;
 	}
-	public String getRank() {
-		return rank;
-	}
-	public void setRank(String rank) {
-		this.rank = rank;
-	}
-	
-	public String getImgUrl() {
-		return imgUrl;
-	}
-	public void setImgUrl(String imgUrl) {
-		this.imgUrl = imgUrl;
-	}
 	@Override
 	public String toString() {
 		return "Film [id=" + id + ", webSiteFlag=" + webSiteFlag + ", fullTile=" + fullTitle + ", shortTitle="
@@ -113,12 +133,4 @@ public class Film {
 				+ ", detailUrl=" + detailUrl + ", commentType=" + commentType + ", prize=" + prize + ", isRecomended="
 				+ isRecomended + ", sourceUrl=" + sourceUrl + "]";
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 }
