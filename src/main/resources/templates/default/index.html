@@ -1,0 +1,14 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>hello</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/xspider.css}" />
+</head>
+<body>
+<!--/*@thymesVar id="name" type="java.lang.String"*/-->
+<div th:replace="default/header::header"></div>
+<p th:text="'Hello！, ' + ${name} + '!'" >3333</p>
+</body>
+<div th:replace="default/footer::footer"></div>
+</html>
