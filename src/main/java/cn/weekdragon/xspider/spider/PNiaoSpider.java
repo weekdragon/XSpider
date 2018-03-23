@@ -1,5 +1,7 @@
 package cn.weekdragon.xspider.spider;
 
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -72,24 +74,37 @@ public class PNiaoSpider implements ISpider{
 				String title = titleAndDetail.text();
 				String detailUrl = titleAndDetail.attr("href");
 				Element info = movie.select("div.info").first();
-				String showTime = info.select(":nth-child(2)").first().select("a").first().text();
-				
+				String showTime = info.select("ul:eq(5)>li:eq(0)").text();
+				if(showTime.length()>5) {
+					showTime = showTime.substring(5);
+				}
+				System.out.println(showTime);
 				String categorys = info.select("ul:eq(2)>li:gt(0)").text();
 				String rank = info.select("ul:eq(4)>li:eq(1)").text();
 				
 				String imgUrl = movie.select("div.left > div.thumb > a > img").first().attr("data-url");
+				
+				String briefCnt = "暂无";
+				try {
+					briefCnt = Jsoup.connect(detailUrl).get().select("div.mainContainer > div.movieOne>div.briefOuter>div.briefCnt").text();
+				} catch (IOException e1) {
+					log.info("获取简介失败:{}",e1);
+				}
+				
 				
 				Film film = new Film();
 				film.setWebSiteFlag(Constants.WEB_SITE_FLAG_PANIAO);
 				film.setFullTitle(title);
 				film.setShortTitle(title);
 				film.setDetailUrl(detailUrl);
-				if(showTime.length()==11) {
+				film.setBriefCnt(briefCnt);
+				if(showTime.length()==10) {
 					film.setShowTime(showTime);
 				}
-				film.setCategory(categorys);
+				film.setCategory(Arrays.asList(categorys.split(" ")));
 				film.setRank(rank);
 				film.setImgUrl(imgUrl);
+				
 				try {
 					filmRepository.save(film);
 				} catch (Exception e) {

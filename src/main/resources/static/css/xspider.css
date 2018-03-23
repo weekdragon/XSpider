@@ -6,8 +6,12 @@ padding:0px;
 	line-height:50px;
 	text-align: center;
 	background-color: #E8E8E8;
-	position: absolute;
+	position: fixed;
 	bottom: 0;
 	width:100%;
 	height: 50px;
+}
+#content{
+	position:absolute;
+	left:20%;
 }

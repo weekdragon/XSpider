@@ -21,8 +21,8 @@ public class Film {
 	private String shortTitle;
 	@Column
 	private String showTime;
-	@Column
-	private String category;
+	@ElementCollection
+	private List<String> category;
 	@Column
 	private String imgUrl;
 	@Column
@@ -31,6 +31,8 @@ public class Film {
 	private String comment;
 	@Column
 	private String detailUrl;
+	@Column
+	private String briefCnt;
 	@Column
 	private int commentType;
 	@Column
@@ -42,6 +44,18 @@ public class Film {
 	
 	
 	
+	public List<String> getCategory() {
+		return category;
+	}
+	public void setCategory(List<String> category) {
+		this.category = category;
+	}
+	public String getBriefCnt() {
+		return briefCnt;
+	}
+	public void setBriefCnt(String briefCnt) {
+		this.briefCnt = briefCnt;
+	}
 	public String getImgUrl() {
 		return imgUrl;
 	}
@@ -83,12 +97,6 @@ public class Film {
 	}
 	public void setShowTime(String showTime) {
 		this.showTime = showTime;
-	}
-	public String getCategory() {
-		return category;
-	}
-	public void setCategory(String category) {
-		this.category = category;
 	}
 	public String getComment() {
 		return comment;
