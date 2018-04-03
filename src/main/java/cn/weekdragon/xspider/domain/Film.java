@@ -1,5 +1,6 @@
 package cn.weekdragon.xspider.domain;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -31,7 +32,7 @@ public class Film {
 	private String comment;
 	@Column
 	private String detailUrl;
-	@Column
+	@Column(length=1024)
 	private String briefCnt;
 	@Column
 	private int commentType;
@@ -42,6 +43,9 @@ public class Film {
 	@ElementCollection
 	private List<String> sourceUrl;
 	
+	@Column(nullable = false) // 映射为字段，值不能为空
+	@org.hibernate.annotations.CreationTimestamp  // 由数据库自动创建时间
+	private Timestamp createTime;
 	
 	
 	public List<String> getCategory() {
@@ -133,6 +137,13 @@ public class Film {
 	}
 	public void setSourceUrl(List<String> sourceUrl) {
 		this.sourceUrl = sourceUrl;
+	}
+	
+	public Timestamp getCreateTime() {
+		return createTime;
+	}
+	public void setCreateTime(Timestamp createTime) {
+		this.createTime = createTime;
 	}
 	@Override
 	public String toString() {

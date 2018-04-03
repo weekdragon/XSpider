@@ -108,7 +108,7 @@ public class PNiaoSpider implements ISpider{
 				try {
 					filmRepository.save(film);
 				} catch (Exception e) {
-					log.info("保存film失败:{}",film);
+					log.info("保存film失败:{},detail:{}",film,e);
 				}
 				
 			});

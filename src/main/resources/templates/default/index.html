@@ -1,121 +1,56 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>hello</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    
-    <!-- css -->
-    <link th:href="@{/css/bootstrap.min.css?v=3.3.6}" rel="stylesheet"></link>
-    <link th:href="@{/css/font-awesome.css?v=4.4.0}" rel="stylesheet"></link>
-    <link th:href="@{/css/animate.css}" rel="stylesheet"></link>
-    <link th:href="@{/css/style.css?v=4.1.0}" rel="stylesheet"></link>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/xspider.css}"></link>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head th:include="default/header::header">
 </head>
-<body class="gray-bg">
-<div th:replace="default/header::header" id="top"></div>
- <div class="wrapper wrapper-content  animated fadeInRight blog content">
-        <div class="row" >
-            <div class="col-lg-4" >
-                <div class="ibox" th:each="film:${films1}">
-                    <div class="ibox-content">
-                    		<h2>
-                        		<a th:href="${film.detailUrl}" class="btn-link" th:text="${film.fullTitle}">自行车都智能化了，你可知道它的历史？</a>
-                      	</h2>
-                        <div class="small m-b-xs">
-                            <strong>发布时间：</strong> <span class="text-muted" th:text="${film.showTime}"><i class="fa fa-clock-o"></i> 9 小时前</span>
-                        </div>
-                        <p th:text="${film.briefCnt}">
-                            在不少旁观者的眼里，智能化几乎成了一种避之唯恐不及的“瘟疫”，开始攀附上大大小小、各式各样的工具和设备，从水杯、灯泡、体重秤这样的小物件，再到冰箱、洗衣机这些生活中的庞然大物。
-                        </p>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h5>分类：</h5>
-                                <p th:each="s:${film.category}">
-                                 		<div class="label label-primary"  th:text ="${s}">自行车</div>
-                                </p>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="small text-right">
-                                    <h5>状态：</h5>
-                                    <div> <i class="fa fa-comments-o"> </i> 54 评论 </div>
-                                    <i class="fa fa-eye"> </i> 52 浏览
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4" >
-                <div class="ibox" th:each="film:${films2}">
-                    <div class="ibox-content">
-                    		<h2>
-                        		<a th:href="${film.detailUrl}" class="btn-link" th:text="${film.fullTitle}">自行车都智能化了，你可知道它的历史？</a>
-                      	</h2>
-                        <div class="small m-b-xs">
-                           <strong>发布时间：</strong> <span class="text-muted" th:text="${film.showTime}"><i class="fa fa-clock-o"></i> 9 小时前</span>
-                        </div>
-                        <p th:text="${film.briefCnt}">
-                            在不少旁观者的眼里，智能化几乎成了一种避之唯恐不及的“瘟疫”，开始攀附上大大小小、各式各样的工具和设备，从水杯、灯泡、体重秤这样的小物件，再到冰箱、洗衣机这些生活中的庞然大物。
-                        </p>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h5>标签：</h5>
-                                <p th:each="s:${film.category}">
-                                 		<div class="label label-primary"  th:text ="${s}">自行车</div>
-                                </p>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="small text-right">
-                                    <h5>状态：</h5>
-                                    <div> <i class="fa fa-comments-o"> </i> 54 评论 </div>
-                                    <i class="fa fa-eye"> </i> 52 浏览
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="ibox" th:each="film:${films3}">
-                    <div class="ibox-content">
-                    		<h2>
-                        		<a th:href="${film.detailUrl}" class="btn-link" th:text="${film.fullTitle}">自行车都智能化了，你可知道它的历史？</a>
-                      	</h2>
-                        <div class="small m-b-xs">
-                           <strong>发布时间：</strong> <span class="text-muted" th:text="${film.showTime}"><i class="fa fa-clock-o"></i> 9 小时前</span>
-                        </div>
-                        <p th:text="${film.briefCnt}">
-                            在不少旁观者的眼里，智能化几乎成了一种避之唯恐不及的“瘟疫”，开始攀附上大大小小、各式各样的工具和设备，从水杯、灯泡、体重秤这样的小物件，再到冰箱、洗衣机这些生活中的庞然大物。
-                        </p>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h5>标签：</h5>
-                                <p th:each="s:${film.category}">
-                                 		<div class="label label-primary"  th:text ="${s}">自行车</div>
-                                </p>
-                                 
-                            </div>
-                            <div class="col-md-6">
-                                <div class="small text-right">
-                                    <h5>状态：</h5>
-                                    <div> <i class="fa fa-comments-o"> </i> 54 评论 </div>
-                                    <i class="fa fa-eye"> </i> 52 浏览
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 全局js -->
-    <script th:src="@{/js/jquery.min.js?v=2.1.4}"></script>
-    <script th:src="@{/js/bootstrap.min.js?v=3.3.6}"></script>
-
-    <!-- 自定义js -->
-    <script th:src="@{/js/content.js?v=1.0.0}"></script>
+<body>
+	<div class="container film-content-container ">
+		
+		<div class="row">
+			<!-- Film Entries Column -->
+			<div class="col-md-8">
+				<div id="mainContainer">
+					<div id="mainContainerRepleace">
+					
+						<div class="card mb-4" th:each="film:${films}">
+							<div class="card-block">
+								<h2 class = "card-title">
+									<a th:href="${film.detailUrl}" class="btn-link"
+										th:text="${film.fullTitle}">自行车都智能化了，你可知道它的历史？</a>
+								</h2>
+								<div class="small m-b-xs">
+									<strong>发布时间：</strong> <span class="text-muted"
+										th:text="${film.showTime}"><i class="fa fa-clock-o"></i>
+										9 小时前</span>
+								</div>
+								<p th:text="${film.briefCnt}">
+									在不少旁观者的眼里，智能化几乎成了一种避之唯恐不及的“瘟疫”，开始攀附上大大小小、各式各样的工具和设备，从水杯、灯泡、体重秤这样的小物件，再到冰箱、洗衣机这些生活中的庞然大物。
+								</p>
+								<div class="row">
+									<div class="col-md-6">
+										<div class="card-text large text-left">分类：
+											<span class = "badge badge-default" th:each="s:${film.category}" th:text="${s}"></span>
+										</div>
+									</div>
+									<div class="col-md-6">
+										<div class="card-text small text-right">
+											<i class="fa fa-comments-o"> </i> 54 评论
+											<i class="fa fa-eye"> </i> 52 浏览
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+		      			<div th:replace="~{default/page :: page}">...</div>
+		      		</div>
+	      		</div>
+			</div>
+		</div>
+	</div>
+<div th:replace="default/footer::footer"></div>
+<script src="../../js/index.js" th:src="@{/js/index.js}"></script>
 
 </body>
-<div th:replace="default/footer::footer"></div>
+
 </html>

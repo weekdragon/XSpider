@@ -1,16 +1,29 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>hello</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8">
 </head>
 <body>
-<footer th:fragment="footer" id = "footer">
-		<p>©2018&nbsp;·&nbsp;wanandroid.com&nbsp;·&nbsp;All Rights Reserved.&nbsp;
-		<span>湘ICP备17000959号</span>&nbsp;·&nbsp;
-		<a href="#">关于我们</a>
-		<a href="#" target="_blank" title="站长统计">站长统计</a>
-	</p>
-	</footer>
+<footer class="film-footer bg-inverse" th:fragment="footer">
+	<a id="goToTop" href="#">
+		<i class="fa fa-chevron-up fa-3x" aria-hidden="true"></i>
+	</a>
+	<div class="container">
+		<p class="m-0 text-center text-white">
+			©2018&nbsp;·&nbsp;weekdragon.cn&nbsp;·&nbsp;All Rights
+			Reserved.&nbsp; <span>湘ICP备17000959号</span>&nbsp;·&nbsp; <a href="#">关于我们</a>
+			<a href="#" target="_blank" title="站长统计">站长统计</a>
+		</p>
+	</div>
+	<!-- 全局js -->
+	<script th:src="@{/js/jquery.min.js}"></script>
+	<script th:src="@{/js/popper.min.js}"></script>
+	<script th:src="@{/js/bootstrap.min.js}"></script>
+	<script src="../../js/thinker-md.vendor.min.js" th:src="@{/js/thinker-md.vendor.min.js}"></script>
+	    <script src="../../js/thymeleaf-bootstrap-paginator.js" th:src="@{/js/thymeleaf-bootstrap-paginator.js}"></script>
+
+	<!-- 自定义js -->
+	<script th:src="@{/js/xspider.js}"></script>
+</footer>
 </body>
 </html>
