@@ -16,12 +16,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import cn.weekdragon.xspider.domain.Film;
 import cn.weekdragon.xspider.repository.FilmRepository;
+import cn.weekdragon.xspider.service.FilmService;
 
 @Controller
 public class MainController {
 
 	@Autowired
-	private FilmRepository filmRepository;
+	private FilmService filmService;
 	
 	@GetMapping("/")
 	public String index(Model model,
@@ -30,7 +31,7 @@ public class MainController {
 		Order idOrder = new Order(Direction.DESC, "id");  
         Sort sort = new Sort(idOrder);
 		Pageable pageable = new PageRequest(pageIndex, pageSize,sort);
-		Page<Film> page = filmRepository.findAll(pageable);
+		Page<Film> page = filmService.listNewestFilms("", pageable);
 		List<Film> films = page.getContent();
 		model.addAttribute("films",films);
 		model.addAttribute("page", page);

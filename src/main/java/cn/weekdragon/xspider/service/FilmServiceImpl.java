@@ -16,8 +16,11 @@ public class FilmServiceImpl implements FilmService {
 	
 	@Override
 	public Film saveFilm(Film film) {
-		// TODO Auto-generated method stub
-		return null;
+		Film film2 = filmRepository.findFilmByFullTitleAndDetailUrl(film.getFullTitle(), film.getDetailUrl());
+		if(film2 == null) {
+			return filmRepository.save(film);
+		}
+		return film2;
 	}
 
 	@Override
@@ -34,7 +37,7 @@ public class FilmServiceImpl implements FilmService {
 
 	@Override
 	public Page<Film> listNewestFilms(String keyword, Pageable pageable) {
-		return filmRepository.findDistinctFilmByFullTitleContainingOrBriefCntContaining(keyword, keyword, pageable);
+		return filmRepository.findDistinctFilmByFullTitleContaining(keyword, pageable);
 	}
 	
 	@Override

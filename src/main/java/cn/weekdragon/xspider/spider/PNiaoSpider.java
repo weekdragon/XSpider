@@ -6,45 +6,71 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.PostConstruct;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
-import cn.weekdragon.xspider.Application;
 import cn.weekdragon.xspider.domain.Film;
-import cn.weekdragon.xspider.repository.FilmRepository;
-import cn.weekdragon.xspider.spider.ISpider;
+import cn.weekdragon.xspider.service.FilmService;
 import cn.weekdragon.xspider.util.Constants;
 
+@Component
 public class PNiaoSpider implements ISpider{
 
 	final Logger log = LoggerFactory.getLogger(PNiaoSpider.class);
-	
+	@Autowired
+	private FilmService filmService;
 	private String listBegin = "http://www.pniao.com/Mov/main/pn1.html";
-	private int pageIndex = 1;
 	private int pageTotal = -1;
-	private String currentPageUrl;
+	
+	//假设电影网站一次更新页面导致页面增加的数量不超过2页，每次监控前两页就可以得到所有最新的电影
+	private int IncreasedPageSize = 2;
 
-	public String getNextPageUrl() {
+	public String getNextPageUrl(String currentPageUrl,int pageIndex) {
 		int lastIndexOf = currentPageUrl.lastIndexOf("/");
 		String nextPageUrl = null;
-		if(pageIndex<pageTotal) {
-			nextPageUrl = currentPageUrl.substring(0, lastIndexOf)+"/pn" + ++pageIndex + ".html";
+		if(pageIndex <= pageTotal) {
+			nextPageUrl = currentPageUrl.substring(0, lastIndexOf)+"/pn" + pageIndex + ".html";
 		}
 		return nextPageUrl;
 	}
 
+	@PostConstruct
+	public void firstGetAll() {
+		log.info("[time:[{}, {}抓取所有任务开始]",System.currentTimeMillis()/1000,getSpiderInfo());
+		fetchPage(Integer.MAX_VALUE);
+		log.info("[time:[{}, {}抓取所有任务结束]",System.currentTimeMillis()/1000,getSpiderInfo());
+	}
 
+	@Scheduled(cron="0 0/1 * * * ? ")   //每1分钟执行一次
+	public void getToday() {
+		log.info("[time:[{}, {}定时抓取任务开始]",System.currentTimeMillis()/1000,getSpiderInfo());
+		fetchPage(IncreasedPageSize);
+		log.info("[time:[{}, {}定时抓取任务结束]",System.currentTimeMillis()/1000,getSpiderInfo());
+	}
+	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void firstGetAll() throws Exception {
-		FilmRepository filmRepository = Application.applicationContext.getBean(FilmRepository.class);
-		currentPageUrl = listBegin;
-		while(currentPageUrl!=null) {
+	@Override
+	public void fetchPage(int pageSize) {
+		int pageIndex = 1;
+		String currentPageUrl = listBegin;
+		while(currentPageUrl!=null && pageIndex <= pageSize) {
 			log.info("访问页面{url = {}, index = {}, total = {}}",currentPageUrl,pageIndex,pageTotal);
-			Document doc = Jsoup.connect(currentPageUrl).get();
+			Document doc = null;
+			try {
+				doc = Jsoup.connect(currentPageUrl).get();
+			} catch (IOException e2) {
+				log.error("访问{}的网页[{}]失败",getSpiderInfo(),currentPageUrl);
+				return;
+			}
 			//
 			if(pageTotal == -1) {
 				Element totalNum = doc.select("div.mainPage :nth-child(10)").first();
@@ -62,8 +88,6 @@ public class PNiaoSpider implements ISpider{
 				log.debug("抓取列表数据失败");
 				return;
 			}
-			int size = movies.size();
-			System.out.println(size);
 			movies.parallelStream().forEach(movieL->{
 				Element movie = (Element) movieL;
 				Element titleAndDetail = movie.select("div.movTitle").first().select("a").first();
@@ -78,7 +102,6 @@ public class PNiaoSpider implements ISpider{
 				if(showTime.length()>5) {
 					showTime = showTime.substring(5);
 				}
-				System.out.println(showTime);
 				String categorys = info.select("ul:eq(2)>li:gt(0)").text();
 				String rank = info.select("ul:eq(4)>li:eq(1)").text();
 				
@@ -86,7 +109,9 @@ public class PNiaoSpider implements ISpider{
 				
 				String briefCnt = "暂无";
 				try {
+					
 					briefCnt = Jsoup.connect(detailUrl).get().select("div.mainContainer > div.movieOne>div.briefOuter>div.briefCnt").text();
+					
 				} catch (IOException e1) {
 					log.info("获取简介失败:{}",e1);
 				}
@@ -106,23 +131,17 @@ public class PNiaoSpider implements ISpider{
 				film.setImgUrl(imgUrl);
 				
 				try {
-					filmRepository.save(film);
+					filmService.saveFilm(film);
 				} catch (Exception e) {
 					log.info("保存film失败:{},detail:{}",film,e);
 				}
 				
 			});
-			currentPageUrl=getNextPageUrl();
+			currentPageUrl=getNextPageUrl(currentPageUrl,++pageIndex);
 			log.info("下一页面:{}",currentPageUrl);
 		}
-	}
-
-
-	public void getToday() {
-		// TODO Auto-generated method stub
 		
 	}
-
 
 	public String getSpiderInfo() {
 		return "PNiaoSpider";

@@ -5,17 +5,17 @@
 </head>
 <body>
 	<div class="container film-content-container ">
-		
-		<div class="row">
+		<div class="row mb-2">
 			<!-- Film Entries Column -->
-			<div class="col-md-8">
+			<div class="col-md-12">
 				<div id="mainContainer">
 					<div id="mainContainerRepleace">
 					
-						<div class="card mb-4" th:each="film:${films}">
-							<div class="card-block">
+						<div class="card flex-md-row mb-4 box-shadow h-md-250" th:each="film:${films}">
+							<div class="card-body d-flex flex-column ">
+							
 								<h2 class = "card-title">
-									<a th:href="${film.detailUrl}" class="btn-link"
+									<a th:href="${film.detailUrl}" class="btn-link" target="blank"
 										th:text="${film.fullTitle}">自行车都智能化了，你可知道它的历史？</a>
 								</h2>
 								<div class="small m-b-xs">
@@ -29,17 +29,18 @@
 								<div class="row">
 									<div class="col-md-6">
 										<div class="card-text large text-left">分类：
-											<span class = "badge badge-default" th:each="s:${film.category}" th:text="${s}"></span>
+											<span class = "badge badge-secondary" th:each="s:${film.category}" th:text="${s}"></span>
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="card-text small text-right">
-											<i class="fa fa-comments-o"> </i> 54 评论
-											<i class="fa fa-eye"> </i> 52 浏览
+											<i class="fa fa-comments-o"> </i> - 评论
+											<i class="fa fa-eye"> </i> - 浏览
 										</div>
 									</div>
 								</div>
 							</div>
+							<img class="card-img-right flex-auto d-none d-md-block img-responsive" th:src="${film.imgUrl}" alt="预览图片">
 						</div>
 						
 		      			<div th:replace="~{default/page :: page}">...</div>
