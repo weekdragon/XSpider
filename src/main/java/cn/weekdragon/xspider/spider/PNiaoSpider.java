@@ -2,7 +2,6 @@ package cn.weekdragon.xspider.spider;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,7 +24,7 @@ import cn.weekdragon.xspider.util.Constants;
 @Component
 public class PNiaoSpider implements ISpider{
 
-	final Logger log = LoggerFactory.getLogger(PNiaoSpider.class);
+	final Logger log = LoggerFactory.getLogger(this.getClass());
 	@Autowired
 	private FilmService filmService;
 	private String listBegin = "http://www.pniao.com/Mov/main/pn1.html";
@@ -46,18 +45,17 @@ public class PNiaoSpider implements ISpider{
 	@PostConstruct
 	public void firstGetAll() {
 		log.info("[time:[{}, {}抓取所有任务开始]",System.currentTimeMillis()/1000,getSpiderInfo());
-		fetchPage(Integer.MAX_VALUE);
+		//fetchPage(Integer.MAX_VALUE);
 		log.info("[time:[{}, {}抓取所有任务结束]",System.currentTimeMillis()/1000,getSpiderInfo());
 	}
 
-	@Scheduled(cron="0 0/1 * * * ? ")   //每1分钟执行一次
+	//@Scheduled(cron="0 0/1 * * * ? ")   //每1分钟执行一次
 	public void getToday() {
 		log.info("[time:[{}, {}定时抓取任务开始]",System.currentTimeMillis()/1000,getSpiderInfo());
 		fetchPage(IncreasedPageSize);
 		log.info("[time:[{}, {}定时抓取任务结束]",System.currentTimeMillis()/1000,getSpiderInfo());
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void fetchPage(int pageSize) {
 		int pageIndex = 1;
@@ -83,13 +81,12 @@ public class PNiaoSpider implements ISpider{
 				System.out.println("总数："+pageTotal);
 			}
 			Elements moviesContainer = doc.select("div.movies");
-			List movies = moviesContainer.select("div.eachOne");
+			Elements movies = moviesContainer.select("div.eachOne");
 			if( movies == null) {
 				log.debug("抓取列表数据失败");
 				return;
 			}
-			movies.parallelStream().forEach(movieL->{
-				Element movie = (Element) movieL;
+			movies.parallelStream().forEach(movie->{
 				Element titleAndDetail = movie.select("div.movTitle").first().select("a").first();
 				if(titleAndDetail==null) {
 					log.debug("抓取列项数据失败");

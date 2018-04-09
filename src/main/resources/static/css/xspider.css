@@ -1,5 +1,14 @@
 
 
+/* 详细简介超出4行显示省略号 */
+.briefCnt{
+    max-height: 200px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+}
+
 
 
 /* 标签 */
