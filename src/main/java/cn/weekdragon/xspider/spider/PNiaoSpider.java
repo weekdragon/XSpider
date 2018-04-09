@@ -22,9 +22,8 @@ import cn.weekdragon.xspider.service.FilmService;
 import cn.weekdragon.xspider.util.Constants;
 
 @Component
-public class PNiaoSpider implements ISpider{
+public class PNiaoSpider extends AbstractSpider {
 
-	final Logger log = LoggerFactory.getLogger(this.getClass());
 	@Autowired
 	private FilmService filmService;
 	private String listBegin = "http://www.pniao.com/Mov/main/pn1.html";
@@ -49,7 +48,7 @@ public class PNiaoSpider implements ISpider{
 		log.info("[time:[{}, {}抓取所有任务结束]",System.currentTimeMillis()/1000,getSpiderInfo());
 	}
 
-	//@Scheduled(cron="0 0/1 * * * ? ")   //每1分钟执行一次
+	@Scheduled(cron="0 0 0/1 * * ? ")   //每1小时执行一次
 	public void getToday() {
 		log.info("[time:[{}, {}定时抓取任务开始]",System.currentTimeMillis()/1000,getSpiderInfo());
 		fetchPage(IncreasedPageSize);
@@ -106,11 +105,9 @@ public class PNiaoSpider implements ISpider{
 				
 				String briefCnt = "暂无";
 				try {
-					
-					briefCnt = Jsoup.connect(detailUrl).get().select("div.mainContainer > div.movieOne>div.briefOuter>div.briefCnt").text();
-					
+					briefCnt = Jsoup.connect(detailUrl).timeout(3000).get().select("div.mainContainer > div.movieOne>div.briefOuter>div.briefCnt").text();
 				} catch (IOException e1) {
-					log.info("获取简介失败:{}",e1);
+					log.info("获取简介失败:{},url:{}",e1,detailUrl);
 				}
 				
 				

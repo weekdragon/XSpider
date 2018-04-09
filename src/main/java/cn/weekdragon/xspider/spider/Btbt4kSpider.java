@@ -14,6 +14,7 @@ import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import cn.weekdragon.xspider.domain.Film;
@@ -21,9 +22,8 @@ import cn.weekdragon.xspider.service.FilmService;
 import cn.weekdragon.xspider.util.Constants;
 
 @Component
-public class Btbt4kSpider implements ISpider {
+public class Btbt4kSpider extends AbstractSpider {
 
-	final Logger log = LoggerFactory.getLogger(this.getClass());
 	@Autowired
 	private FilmService filmService;
 	//http://www.btbt4k.com/home-popular-list-version2018040809-offset1976-count24.js
@@ -32,13 +32,12 @@ public class Btbt4kSpider implements ISpider {
 	private String listBegin = apiPage.replace("{offset}", "0");
 	private int pageTotal = -1;
 	
-	//假设电影网站一次更新页面导致页面增加的数量不超过2页，每次监控前两页就可以得到所有最新的电影
-	private int IncreasedPageSize = 2;
+	//假设电影网站一次更新页面导致页面增加的数量不超过 IncreasedPageSize 页，每次监控前 IncreasedPageSize 页就可以得到所有最新的电影
+	private int IncreasedPageSize = 1;
 	private String baseUrl = "http://www.btbt4k.com/";
 	
 	public String getNextPageUrl(String currentPageUrl, int pageIndex) {
-		// TODO Auto-generated method stub
-		return null;
+		return  apiPage.replace("{offset}", "" + pageIndex*24);
 	}
 
 	@PostConstruct
@@ -49,13 +48,15 @@ public class Btbt4kSpider implements ISpider {
 		
 	}
 
+	@Scheduled(cron="0 0 0/1 * * ? ")   //每1小时执行一次
 	public void getToday() {
-		// TODO Auto-generated method stub
-		
+		log.info("[time:[{}, {}定时抓取任务开始]",System.currentTimeMillis()/1000,getSpiderInfo());
+		fetchPage(IncreasedPageSize);
+		log.info("[time:[{}, {}定时抓取任务结束]",System.currentTimeMillis()/1000,getSpiderInfo());
 	}
 
 	public void fetchPage(int pageSize) {
-		int pageIndex = 1;
+		int pageIndex = 0;
 		String currentPageUrl = listBegin;
 		while(currentPageUrl!=null && pageIndex <= pageSize) {
 			log.info("访问页面{url = {}, index = {}, total = {}}",currentPageUrl,pageIndex,pageTotal);
@@ -111,19 +112,16 @@ public class Btbt4kSpider implements ISpider {
 				String briefCnt = "暂无";
 				try {
 					briefCnt = Jsoup.connect(detailUrl).get().select("#storyline_val > p:nth-child(1)").text();
-					System.out.println("之前");
-					System.out.println(briefCnt);
+					if(briefCnt.length()>1024) {
+						briefCnt = briefCnt.substring(0,1023);
+					}
 					briefCnt = briefCnt.replaceAll("【.*】", "").replaceAll("◎.*", "");
-					System.out.println("之后");
-					System.out.println(briefCnt);
-					System.out.println();
-					System.out.println();
 				} catch (IOException e1) {
 					log.info("获取简介失败:{}",e1);
 				}
 				
 				Film film = new Film();
-				film.setWebSiteFlag(Constants.WEB_SITE_FLAG_PANIAO);
+				film.setWebSiteFlag(Constants.WEB_SITE_FLAG_BTBT4K);
 				film.setFullTitle(title);
 				film.setShortTitle(title);
 				film.setDetailUrl(detailUrl);
@@ -148,27 +146,6 @@ public class Btbt4kSpider implements ISpider {
 		
 		
 	}
-	
-	public static String unicodeToString(String str) {  
-		  
-	    Pattern pattern = Pattern.compile("(\\\\u(\\p{XDigit}{4}))");  
-	    Matcher matcher = pattern.matcher(str);  
-	    char ch;  
-	    while (matcher.find()) {  
-	        String group = matcher.group(2);  
-	        ch = (char) Integer.parseInt(group, 16);  
-	        String group1 = matcher.group(1);  
-	        str = str.replace(group1, ch + "");  
-	    }  
-	    return str;  
-	}  
-
-	@Override
-	public String getSpiderInfo() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	
 
 }

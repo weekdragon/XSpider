@@ -69,6 +69,6 @@ public class FilmController {
 //			model.addAttribute("users", users);
 //		}
 		
-		return (async==true?"/default/index :: #mainContainerRepleace":"default/index");
+		return (async==true?"default/index :: #mainContainerRepleace":"default/index");
 	}
 }

@@ -32,7 +32,7 @@ public class Film {
 	private String comment;
 	@Column
 	private String detailUrl;
-	@Column(length=1024)
+	@Column(length=2048)
 	private String briefCnt;
 	@Column
 	private int commentType;
