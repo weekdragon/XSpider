@@ -2,8 +2,6 @@ package cn.weekdragon.xspider.spider;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
 
@@ -11,8 +9,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -40,14 +36,6 @@ public class Btbt4kSpider extends AbstractSpider {
 		return  apiPage.replace("{offset}", "" + pageIndex*24);
 	}
 
-	@PostConstruct
-	public void firstGetAll() throws Exception {
-		log.info("[time:[{}, {}抓取所有任务开始]",System.currentTimeMillis()/1000,getSpiderInfo());
-		fetchPage(Integer.MAX_VALUE);
-		log.info("[time:[{}, {}抓取所有任务结束]",System.currentTimeMillis()/1000,getSpiderInfo());
-		
-	}
-
 	@Scheduled(cron="0 0 0/1 * * ? ")   //每1小时执行一次
 	public void getToday() {
 		log.info("[time:[{}, {}定时抓取任务开始]",System.currentTimeMillis()/1000,getSpiderInfo());
@@ -62,7 +50,7 @@ public class Btbt4kSpider extends AbstractSpider {
 			log.info("访问页面{url = {}, index = {}, total = {}}",currentPageUrl,pageIndex,pageTotal);
 			final Document doc;
 			try {
-				String body = Jsoup.connect(currentPageUrl).execute().body();
+				String body = Jsoup.connect(currentPageUrl).timeout(10000).execute().body();
 				if("htla(null)" .equals(body)) {//没有下一页了
 					currentPageUrl = null;
 					log.info("下一页面:{},body:{}",currentPageUrl,body);
@@ -77,13 +65,13 @@ public class Btbt4kSpider extends AbstractSpider {
 
 			Elements movies = doc.select("div.htl_item");
 			if( movies == null) {
-				log.debug("抓取列表数据失败");
+				log.info("抓取列表数据失败");
 				return;
 			}
 			movies.stream().forEach(movie->{
 				Element titleAndDetail = movie.select("div.htl_item_info_hd").first();
 				if(titleAndDetail==null) {
-					log.debug("抓取列项数据失败");
+					log.info("抓取列项数据失败");
 					return;
 				}
 				
@@ -114,13 +102,13 @@ public class Btbt4kSpider extends AbstractSpider {
 					if(detailUrl.startsWith("/")) {
 						detailUrl = baseUrl + detailUrl;
 					}
-					briefCnt = Jsoup.connect(detailUrl).get().select("#storyline_val > p:nth-child(1)").text();
+					briefCnt = Jsoup.connect(detailUrl).timeout(10000).get().select("#storyline_val > p:nth-child(1)").text();
 					if(briefCnt.length()>1024) {
 						briefCnt = briefCnt.substring(0,1023);
 					}
 					briefCnt = briefCnt.replaceAll("【.*】", "").replaceAll("◎.*", "");
 				} catch (Exception e1) {
-					log.info("获取简介失败:Exception = {}, detailUrl = {}, doc = {}", e1, detailUrl, doc.toString());
+					log.error("获取简介失败:Exception = {}, detailUrl = {}, doc = {}", e1, detailUrl, doc.toString());
 				}
 				
 				Film film = new Film();
@@ -139,7 +127,7 @@ public class Btbt4kSpider extends AbstractSpider {
 				try {
 					filmService.saveFilm(film);
 				} catch (Exception e) {
-					log.info("保存film失败:{},detail:{}",film,e);
+					log.error("保存film失败:{},detail:{}",film,e);
 				}
 				
 			});

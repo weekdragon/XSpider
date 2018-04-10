@@ -11,8 +11,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -41,18 +39,15 @@ public class PNiaoSpider extends AbstractSpider {
 		return nextPageUrl;
 	}
 
-	@PostConstruct
-	public void firstGetAll() {
-		log.info("[time:[{}, {}抓取所有任务开始]",System.currentTimeMillis()/1000,getSpiderInfo());
-		//fetchPage(Integer.MAX_VALUE);
-		log.info("[time:[{}, {}抓取所有任务结束]",System.currentTimeMillis()/1000,getSpiderInfo());
-	}
-
 	@Scheduled(cron="0 0 0/1 * * ? ")   //每1小时执行一次
 	public void getToday() {
-		log.info("[time:[{}, {}定时抓取任务开始]",System.currentTimeMillis()/1000,getSpiderInfo());
-		fetchPage(IncreasedPageSize);
-		log.info("[time:[{}, {}定时抓取任务结束]",System.currentTimeMillis()/1000,getSpiderInfo());
+		if(fetchAll){
+			log.info("[time:[{}, {}抓取所有任务开始]",System.currentTimeMillis()/1000,getSpiderInfo());
+			fetchPage(Integer.MAX_VALUE);
+			log.info("[time:[{}, {}抓取所有任务结束]",System.currentTimeMillis()/1000,getSpiderInfo());
+		}else {
+			log.info("[time:[{}, {}跳过抓取所有]",System.currentTimeMillis()/1000,getSpiderInfo());
+		}
 	}
 	
 	@Override
@@ -61,9 +56,9 @@ public class PNiaoSpider extends AbstractSpider {
 		String currentPageUrl = listBegin;
 		while(currentPageUrl!=null && pageIndex <= pageSize) {
 			log.info("访问页面{url = {}, index = {}, total = {}}",currentPageUrl,pageIndex,pageTotal);
-			Document doc = null;
+			final Document doc;
 			try {
-				doc = Jsoup.connect(currentPageUrl).get();
+				doc = Jsoup.connect(currentPageUrl).timeout(10000).get();
 			} catch (IOException e2) {
 				log.error("访问{}的网页[{}]失败",getSpiderInfo(),currentPageUrl);
 				return;
@@ -77,18 +72,18 @@ public class PNiaoSpider extends AbstractSpider {
 				if(matcher.find()) {
 					pageTotal = Integer.parseInt(matcher.group());
 				}
-				System.out.println("总数："+pageTotal);
+				log.info("总数:{}",pageTotal);
 			}
 			Elements moviesContainer = doc.select("div.movies");
 			Elements movies = moviesContainer.select("div.eachOne");
 			if( movies == null) {
-				log.debug("抓取列表数据失败");
+				log.info("抓取列表数据失败");
 				return;
 			}
 			movies.parallelStream().forEach(movie->{
 				Element titleAndDetail = movie.select("div.movTitle").first().select("a").first();
 				if(titleAndDetail==null) {
-					log.debug("抓取列项数据失败");
+					log.info("抓取列项数据失败");
 					return;
 				}
 				String title = titleAndDetail.text();
@@ -105,9 +100,9 @@ public class PNiaoSpider extends AbstractSpider {
 				
 				String briefCnt = "暂无";
 				try {
-					briefCnt = Jsoup.connect(detailUrl).timeout(3000).get().select("div.mainContainer > div.movieOne>div.briefOuter>div.briefCnt").text();
+					briefCnt = Jsoup.connect(detailUrl).timeout(10000).get().select("div.mainContainer > div.movieOne>div.briefOuter>div.briefCnt").text();
 				} catch (IOException e1) {
-					log.info("获取简介失败:{},url:{}",e1,detailUrl);
+					log.error("获取简介失败:Exception = {}, detailUrl = {}, doc = {}", e1, detailUrl, doc.toString());
 				}
 				
 				
@@ -127,18 +122,12 @@ public class PNiaoSpider extends AbstractSpider {
 				try {
 					filmService.saveFilm(film);
 				} catch (Exception e) {
-					log.info("保存film失败:{},detail:{}",film,e);
+					log.error("保存film失败:{},detail:{}",film,e);
 				}
 				
 			});
 			currentPageUrl=getNextPageUrl(currentPageUrl,++pageIndex);
 			log.info("下一页面:{}",currentPageUrl);
 		}
-		
 	}
-
-	public String getSpiderInfo() {
-		return "PNiaoSpider";
-	}
-	
 }

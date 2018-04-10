@@ -19,7 +19,6 @@ $(function() {
 			 },
 			 success: function(data){
 				 $("#mainContainer").html(data);
-				 
 				 var keyword = $("#indexkeyword").val();
 				 
 				 // 如果是分类查询，则取消最新、最热选中样式

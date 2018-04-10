@@ -3,11 +3,17 @@ package cn.weekdragon.xspider.spider;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 
 public class AbstractSpider implements ISpider{
 
+	@Value("${xspider.fetchAll}")
+	public boolean fetchAll;
+	
 	final Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	@Override
@@ -16,10 +22,15 @@ public class AbstractSpider implements ISpider{
 		return null;
 	}
 
-	@Override
-	public void firstGetAll() throws Exception {
-		// TODO Auto-generated method stub
-		
+	@PostConstruct
+	public void firstGetAll() {
+		if(fetchAll){
+			log.info("[time:[{}, {}抓取所有任务开始]",System.currentTimeMillis()/1000,getSpiderInfo());
+			fetchPage(Integer.MAX_VALUE);
+			log.info("[time:[{}, {}抓取所有任务结束]",System.currentTimeMillis()/1000,getSpiderInfo());
+		}else {
+			log.info("[time:[{}, {}跳过抓取所有]",System.currentTimeMillis()/1000,getSpiderInfo());
+		}
 	}
 
 	@Override
