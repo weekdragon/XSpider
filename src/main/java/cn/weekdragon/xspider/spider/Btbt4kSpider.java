@@ -60,7 +60,7 @@ public class Btbt4kSpider extends AbstractSpider {
 		String currentPageUrl = listBegin;
 		while(currentPageUrl!=null && pageIndex <= pageSize) {
 			log.info("访问页面{url = {}, index = {}, total = {}}",currentPageUrl,pageIndex,pageTotal);
-			Document doc = null;
+			final Document doc;
 			try {
 				String body = Jsoup.connect(currentPageUrl).execute().body();
 				if("htla(null)" .equals(body)) {//没有下一页了
@@ -90,7 +90,7 @@ public class Btbt4kSpider extends AbstractSpider {
 				String title = titleAndDetail.select("span[class='htl_item_name']").text();
 				title = unicodeToString(title);
 				
-				Elements detailUrlA = movie.select("a:eq(0)");
+				Elements detailUrlA = movie.select("a");
 				String detailUrl = "";
 				if(detailUrlA!=null) {
 					detailUrl = detailUrlA.first().attr("href");
@@ -111,13 +111,16 @@ public class Btbt4kSpider extends AbstractSpider {
 				
 				String briefCnt = "暂无";
 				try {
+					if(detailUrl.startsWith("/")) {
+						detailUrl = baseUrl + detailUrl;
+					}
 					briefCnt = Jsoup.connect(detailUrl).get().select("#storyline_val > p:nth-child(1)").text();
 					if(briefCnt.length()>1024) {
 						briefCnt = briefCnt.substring(0,1023);
 					}
 					briefCnt = briefCnt.replaceAll("【.*】", "").replaceAll("◎.*", "");
-				} catch (IOException e1) {
-					log.info("获取简介失败:{}",e1);
+				} catch (Exception e1) {
+					log.info("获取简介失败:Exception = {}, detailUrl = {}, doc = {}", e1, detailUrl, doc.toString());
 				}
 				
 				Film film = new Film();
@@ -143,9 +146,5 @@ public class Btbt4kSpider extends AbstractSpider {
 			currentPageUrl=getNextPageUrl(currentPageUrl,++pageIndex);
 			log.info("下一页面:{}",currentPageUrl);
 		}
-		
-		
 	}
-	
-
 }
