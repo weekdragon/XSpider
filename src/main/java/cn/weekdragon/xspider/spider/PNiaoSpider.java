@@ -5,31 +5,30 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.annotation.PostConstruct;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import cn.weekdragon.xspider.domain.Film;
-import cn.weekdragon.xspider.service.FilmService;
 import cn.weekdragon.xspider.util.Constants;
 
 @Component
 public class PNiaoSpider extends AbstractSpider {
 
-	@Autowired
-	private FilmService filmService;
+
 	private String listBegin = "http://www.pniao.com/Mov/main/pn1.html";
 	private int pageTotal = -1;
 	
 	//假设电影网站一次更新页面导致页面增加的数量不超过2页，每次监控前两页就可以得到所有最新的电影
-	private int IncreasedPageSize = 2;
+	@Override
+	public void init() {
+		increasedPageSize = 2;
+		
+	}
 
+	@Override
 	public String getNextPageUrl(String currentPageUrl,int pageIndex) {
 		int lastIndexOf = currentPageUrl.lastIndexOf("/");
 		String nextPageUrl = null;
@@ -37,17 +36,6 @@ public class PNiaoSpider extends AbstractSpider {
 			nextPageUrl = currentPageUrl.substring(0, lastIndexOf)+"/pn" + pageIndex + ".html";
 		}
 		return nextPageUrl;
-	}
-
-	@Scheduled(cron="0 0 0/1 * * ? ")   //每1小时执行一次
-	public void getToday() {
-		if(fetchAll){
-			log.info("[time:[{}, {}抓取所有任务开始]",System.currentTimeMillis()/1000,getSpiderInfo());
-			fetchPage(Integer.MAX_VALUE);
-			log.info("[time:[{}, {}抓取所有任务结束]",System.currentTimeMillis()/1000,getSpiderInfo());
-		}else {
-			log.info("[time:[{}, {}跳过抓取所有]",System.currentTimeMillis()/1000,getSpiderInfo());
-		}
 	}
 	
 	@Override

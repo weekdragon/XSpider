@@ -3,33 +3,32 @@ package cn.weekdragon.xspider.spider;
 import java.io.IOException;
 import java.util.Arrays;
 
-import javax.annotation.PostConstruct;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import cn.weekdragon.xspider.domain.Film;
-import cn.weekdragon.xspider.service.FilmService;
 import cn.weekdragon.xspider.util.Constants;
 
 @Component
 public class Btbt4kSpider extends AbstractSpider {
 
-	@Autowired
-	private FilmService filmService;
 	//http://www.btbt4k.com/home-popular-list-version2018040809-offset1976-count24.js
 	//http://www.btbt4k.com/home-latest-list-version20160310004645-offset24-count24.js
 	private String apiPage = "http://www.btbt4k.com/home-latest-list-version20160310004645-offset{offset}-count24.js";
 	private String listBegin = apiPage.replace("{offset}", "0");
 	private int pageTotal = -1;
 	
-	//假设电影网站一次更新页面导致页面增加的数量不超过 IncreasedPageSize 页，每次监控前 IncreasedPageSize 页就可以得到所有最新的电影
-	private int IncreasedPageSize = 1;
+	
+	@Override
+	public void init() {
+		increasedPageSize = 1;
+		
+	}
+	
 	private String baseUrl = "http://www.btbt4k.com/";
 	
 	public String getNextPageUrl(String currentPageUrl, int pageIndex) {
@@ -39,7 +38,7 @@ public class Btbt4kSpider extends AbstractSpider {
 	@Scheduled(cron="0 0 0/1 * * ? ")   //每1小时执行一次
 	public void getToday() {
 		log.info("[time:[{}, {}定时抓取任务开始]",System.currentTimeMillis()/1000,getSpiderInfo());
-		fetchPage(IncreasedPageSize);
+		fetchPage(increasedPageSize);
 		log.info("[time:[{}, {}定时抓取任务结束]",System.currentTimeMillis()/1000,getSpiderInfo());
 	}
 
