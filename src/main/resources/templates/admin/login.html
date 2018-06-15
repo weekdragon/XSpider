@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="header">
+<head>
+<title>搜索资源站</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta charset="utf-8" />
+<!-- css -->
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"></link>
+<link th:href="@{/css/animate.css}" rel="stylesheet"></link>
+<link th:href="@{/css/font-awesome.min.css}" rel="stylesheet"></link>
+<link th:href="@{/css/thinker-md.vendor.css}" rel="stylesheet"></link>
+<link href="../../css/thymeleaf-bootstrap-paginator.css" th:href="@{/css/thymeleaf-bootstrap-paginator.css}" rel="stylesheet">
+<!-- customer css -->
+<link rel="stylesheet" type="text/css" th:href="@{/css/signin.css}"></link>
+
+</head>
+<body id="login-body" class="text-center">
+	<form class="form-signin">
+		<img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="这是一张 logo 图片" width="72" height="72">
+		<h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+		<label for="inputEmail" class="sr-only">Email address</label> 
+		<input type="text" id="inputName" class="form-control" placeholder="User Name" required autofocus> 
+		<label for="inputPassword" class="sr-only">Password</label> 
+		<input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+		<div class="checkbox mb-3">
+			<label> <input type="checkbox" value="remember-me"> Remember me</label>
+		</div>
+		<button id="btn-login" class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+		<p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
+	</form>
+</body>
+<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+<script type="text/javascript" th:src ="@{/js/layer/layer.js}"></script>
+<script type="text/javascript" th:src ="@{/js/login.js}"></script>
+<script type="text/javascript" th:src ="@{/js/common.js}"></script>
+<script type="text/javascript" th:src ="@{/js/md5.min.js}"></script>
+</html>

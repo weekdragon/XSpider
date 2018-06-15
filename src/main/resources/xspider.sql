@@ -1,0 +1,2 @@
+delete from user where user_name = 'admin' and password = '8f36fb823df52789af4f6b14c85f1f75';
+insert into user(id,user_name,nick_name,password,salt,last_login_date,login_count) value(1,'admin','weekdragon','8f36fb823df52789af4f6b14c85f1f75','1a2b3c4d',now(),0);
