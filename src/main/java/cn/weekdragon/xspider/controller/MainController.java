@@ -38,4 +38,9 @@ public class MainController {
 		
 		return "default/index";
 	}
+	
+	@GetMapping("/test")
+	public String test() {
+		return "test";
+	}
 }

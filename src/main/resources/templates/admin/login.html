@@ -6,33 +6,76 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta charset="utf-8" />
 <!-- css -->
-<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"></link>
-<link th:href="@{/css/animate.css}" rel="stylesheet"></link>
+<!-- Admin -->
+<link th:href="@{/css/adminlte.min.css}" rel="stylesheet"></link>
+<!-- Ionicons -->
+<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 <link th:href="@{/css/font-awesome.min.css}" rel="stylesheet"></link>
-<link th:href="@{/css/thinker-md.vendor.css}" rel="stylesheet"></link>
-<link href="../../css/thymeleaf-bootstrap-paginator.css" th:href="@{/css/thymeleaf-bootstrap-paginator.css}" rel="stylesheet">
+<!-- iCheck -->
+<link rel="stylesheet" href="../../plugins/iCheck/square/blue.css" th:href="@{/plugins/iCheck/square/blue.css}">
+<!-- Google Font: Source Sans Pro -->
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 <!-- customer css -->
 <link rel="stylesheet" type="text/css" th:href="@{/css/signin.css}"></link>
 
 </head>
-<body id="login-body" class="text-center">
-	<form class="form-signin">
-		<img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="这是一张 logo 图片" width="72" height="72">
-		<h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-		<label for="inputEmail" class="sr-only">Email address</label> 
-		<input type="text" id="inputName" class="form-control" placeholder="User Name" required autofocus> 
-		<label for="inputPassword" class="sr-only">Password</label> 
-		<input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-		<div class="checkbox mb-3">
-			<label> <input type="checkbox" value="remember-me"> Remember me</label>
+<body class="hold-transition login-page">
+	<div class="login-box">
+		<div class="login-logo">
+			<a href="../../index2.html"><b>搜索后台管理系统</b>LTE</a>
 		</div>
-		<button id="btn-login" class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-		<p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
-	</form>
+		<!-- /.login-logo -->
+		<div class="card">
+			<div class="card-body login-card-body">
+				<p class="login-box-msg">Sign in to start your session</p>
+
+				<form action="../../index2.html" method="post">
+					<div class="form-group has-feedback">
+						<input id ="input-username" type="email" class="form-control" placeholder="Email"> <span class="fa fa-envelope form-control-feedback"></span>
+					</div>
+					<div class="form-group has-feedback">
+						<input id="input-password" type="password" class="form-control" placeholder="Password"> <span class="fa fa-lock form-control-feedback"></span>
+					</div>
+					<div class="row">
+						<div class="col-8">
+							<div class="checkbox icheck">
+								<label> <input type="checkbox"> Remember Me
+								</label>
+							</div>
+						</div>
+						<!-- /.col -->
+						<div class="col-4">
+							<button type="submit" id="btn-login" class="btn btn-primary btn-block btn-flat">Sign In</button>
+						</div>
+						<!-- /.col -->
+					</div>
+				</form>
+			</div>
+			<!-- /.login-card-body -->
+		</div>
+	</div>
+	<!-- /.login-box -->
+
+
 </body>
-<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
-<script type="text/javascript" th:src ="@{/js/layer/layer.js}"></script>
-<script type="text/javascript" th:src ="@{/js/login.js}"></script>
-<script type="text/javascript" th:src ="@{/js/common.js}"></script>
-<script type="text/javascript" th:src ="@{/js/md5.min.js}"></script>
+<!-- jQuery -->
+<script src="../../plugins/jquery/jquery.min.js" th:src="@{/plugins/jquery/jquery.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js" th:src="@{/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- iCheck -->
+<script src="../../plugins/iCheck/icheck.min.js" th:src-="@{/plugins/iCheck/icheck.min.js}"></script>
+<!-- Layer -->
+<script src="../../plugins/layer/layer.js" th:src-="@{/plugins/layer/layer.js}"></script>
+<script type="text/javascript" th:src="@{/js/login.js}"></script>
+<script type="text/javascript" th:src="@{/js/common.js}"></script>
+<script type="text/javascript" th:src="@{/js/md5.min.js}"></script>
+<script>
+	$(function() {
+		$('input').iCheck({
+			checkboxClass : 'icheckbox_square-blue',
+			radioClass : 'iradio_square-blue',
+			increaseArea : '20%' // optional
+		})
+	})
+</script>
 </html>
