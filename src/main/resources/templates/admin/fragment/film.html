@@ -111,20 +111,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 						<!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
 						<li class="nav-item">
-							<a href="#" class="nav-link active">
+							<a href="#" class="nav-link">
 								<i class="nav-icon fa fa-dashboard"></i>
 								<p>控制台</p>
 							</a>
 						</li>
-						<li class="nav-item has-treeview">
-							<a href="#" class="nav-link">
+						<li class="nav-item has-treeview menu-open">
+							<a href="#" class="nav-link active">
 								<i class="nav-icon fa fa-th"></i>
 								<p>资源管理 <i class="right fa fa-angle-left"></i>
 								</p>
 							</a>
 							<ul class="nav nav-treeview">
 								<li class="nav-item">
-									<a href="#" class="nav-link ">
+									<a href="#" class="nav-link active">
 										<i class="fa fa-circle-o nav-icon"></i>
 										<p>电影管理</p>
 									</a>
@@ -158,7 +158,62 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		</aside>
 
 		<!-- Content Wrapper. Contains page content -->
-		<div id="content-wrapper" class="content-wrapper" th:fragment="film"></div>
+		<div id="content" class="content-wrapper" th:fragment="film">
+			<section class="content">
+				<div class="row">
+					<div class="col-12">
+						<div class="card">
+							<div class="card-header">
+								<h1 class="card-title">电影管理</h1>
+							</div>
+							<!-- /.card-header -->
+							<div class="card-body">
+								<table id="film-table" class="table table-bordered table-striped">
+									<thead>
+										<tr>
+											<th>
+												<input type="checkbox" class="checkall" />
+											</th>
+											<th>ID</th>
+											<th>标题</th>
+											<th>上映时间</th>
+											<th>详情</th>
+											<th>来源</th>
+											<th>编辑</th>
+											<th>浏览</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="film:${films}">
+											<td>
+												<input type="checkbox" class="checkall" />
+											</td>
+											<td th:text="${film.id}"></td>
+											<td th:text="${film.shortTitle}"></td>
+											<td th:text="${film.showTime}"></td>
+											<td th:text="${film.detailUrl}"></td>
+											<td>某某网</td>
+											<td><a href="javascript:void" class="btn btn-primary">编辑</a></td>
+											<td><a href="javascript:void" class="btn btn-danger">删除</a></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<!-- /.card-body -->
+						</div>
+						<!-- /.card -->
+					</div>
+					<!-- /.col -->
+				</div>
+				<!-- /.row -->
+			</section>
+			<!-- /.content -->
+			<script>
+				$(function() {
+					$("#film-table").DataTable();
+				});
+			</script>
+		</div>
 		<!-- /.content-wrapper -->
 
 		<!-- Control Sidebar -->

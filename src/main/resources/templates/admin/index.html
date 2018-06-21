@@ -13,8 +13,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <!-- Font Awesome Icons -->
 <link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.min.css" th:href="@{/plugins/font-awesome/css/font-awesome.min.css}">
+<!-- Ionicons -->
+<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" >
+<!-- DataTables -->
+<link rel="stylesheet" href="../../plugins/datatables/dataTables.bootstrap4.css" th:href="@{/plugins/datatables/dataTables.bootstrap4.css}">
 <!-- Theme style -->
 <link rel="stylesheet" href="dist/css/adminlte.min.css" th:href="@{/css/adminlte.min.css}">
+<!-- nprogress style -->
+<link rel="stylesheet" th:href="@{/plugins/nprogress/nprogress.css}">
 <!-- Google Font: Source Sans Pro -->
 <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 <link href="" rel="stylesheet" th:href="@{/css/xspider.css}">
@@ -111,7 +117,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 						<!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
 						<li class="nav-item">
-							<a href="#" class="nav-link active">
+							<a href="#console" data-href="console" class="nav-link active">
 								<i class="nav-icon fa fa-dashboard"></i>
 								<p>控制台</p>
 							</a>
@@ -124,7 +130,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 							</a>
 							<ul class="nav nav-treeview">
 								<li class="nav-item">
-									<a href="#film" class="nav-link">
+									<a href="#film" data-href="film" class="nav-link">
 										<i class="fa fa-circle-o nav-icon"></i>
 										<p>电影管理</p>
 									</a>
@@ -158,7 +164,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		</aside>
 
 		<!-- Content Wrapper. Contains page content -->
-		<div id="content-wrapper" class="content-wrapper" th:replace="admin/fragment/console::console"></div>
+		<div id="content" style="min-height: 583px;">
+			<div id="content-wrapper" class="content-wrapper" th:replace="admin/fragment/console::console"></div>
+		</div>
+
 		<!-- /.content-wrapper -->
 
 		<!-- Control Sidebar -->
@@ -191,6 +200,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	<script th:src="@{/plugins/jquery/jquery.min.js}"></script>
 	<!-- Bootstrap 4 -->
 	<script th:src="@{/plugins/bootstrap/js/bootstrap.min.js}"></script>
+	<!-- DataTables -->
+	<script th:src="@{/plugins/datatables/jquery.dataTables.js}"></script>
+	<script th:src="@{/plugins/datatables/dataTables.bootstrap4.js}"></script>
+	<!-- nprogress -->
+	<script th:src="@{/plugins/nprogress/nprogress.js}"></script>
 	<!-- AdminLTE App -->
 	<script th:src="@{/js/adminlte.min.js}"></script>
 	<script th:src="@{/js/admin.js}"></script>
