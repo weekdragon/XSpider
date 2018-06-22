@@ -108,7 +108,7 @@ public class PNiaoSpider extends AbstractSpider {
 				film.setImgUrl(imgUrl);
 				
 				try {
-					filmService.saveFilm(film);
+					filmService.insertDistinctFilm(film);
 				} catch (Exception e) {
 					log.error("保存film失败:{},detail:{}",film,e);
 				}

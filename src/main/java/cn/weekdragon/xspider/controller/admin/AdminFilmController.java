@@ -15,6 +15,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,6 +26,9 @@ import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
 
 import cn.weekdragon.xspider.domain.Film;
 import cn.weekdragon.xspider.domain.User;
+import cn.weekdragon.xspider.exception.GlobalException;
+import cn.weekdragon.xspider.redis.FilmKey;
+import cn.weekdragon.xspider.redis.RedisService;
 import cn.weekdragon.xspider.result.CodeMsg;
 import cn.weekdragon.xspider.result.Result;
 import cn.weekdragon.xspider.service.FilmService;
@@ -31,6 +36,9 @@ import cn.weekdragon.xspider.service.FilmService;
 @Controller
 @RequestMapping("/admin")
 public class AdminFilmController {
+	
+	@Autowired
+	private RedisService redisService;
 	@Autowired
 	private FilmService filmService;
 	@Autowired
@@ -49,7 +57,7 @@ public class AdminFilmController {
 		}
 		Page<Film> page = null;
 		List<Film> list = null;
-		boolean isEmpty = true; // 系统初始化时，没有博客数据
+		boolean isEmpty = true; // 系统初始化时，没有电影数据
 		try {
 			if (order.equals("new")) { // 最新查询
 				Sort sort = new Sort(Direction.DESC, "createTime");
@@ -87,5 +95,32 @@ public class AdminFilmController {
 		
 		String html = engine.process("admin/fragment/film", selectors, ctx);
 		return Result.success(html);
+	}
+	
+	@RequestMapping("/film/{id}/to_edit")
+	public String toFilmEdit(@PathVariable("id") Integer id,Model model) {
+		if(id == null) {
+			throw new GlobalException(CodeMsg.REQUEST_ILLEGAL);
+		}
+		Film film = redisService.get(FilmKey.getById, id+"", Film.class);
+		if(film == null) {
+			film = filmService.getFilmById(id);
+			if(film!=null) {
+				redisService.set(FilmKey.getById, id+"", film);
+			}
+		}
+		model.addAttribute("film", film);
+		return "admin/fragment/film-edit :: #content";
+	}
+	
+	@ResponseBody
+	@RequestMapping("/film/edit")
+	public CodeMsg filmEdit(@RequestBody String json) {
+		Film film = RedisService.stringToBean(json, Film.class);
+		System.out.println(film.getShowTime());
+		filmService.insertDistinctFilm(film);
+		redisService.delete(FilmKey.getById,film.getId()+"");
+		System.out.println(json);
+		return CodeMsg.SUCCESS;
 	}
 }

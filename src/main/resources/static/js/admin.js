@@ -7,7 +7,7 @@ $(function() {
 	var menuItem = $(".nav-link").not($(".has-treeview > .nav-link"));
 	menuItem.click(function() {
 		if($(this).hasClass('active')){
-			return false;
+			return true;
 		}
 		$(".nav-link").removeClass("active");
 		var menu = $(this).parent().parent().parent();
@@ -16,28 +16,43 @@ $(function() {
 		}
 		$(this).addClass("active");
 		var href =  $(this).attr("data-href");
-		getContentData(href);
-		return false;
+		loadHTMLData(href,"content");
+		return true;
 	})
-	
-	$(document).not($(".has-treeview > .nav-link")).ajaxStart(function(){
-		console.log('start');
+	$(document).ajaxStart(function(){
 		NProgress.start();
 	})
-	$(document).not($(".has-treeview > .nav-link")).ajaxStop(function(){
-		console.log('done');
+	$(document).ajaxStop(function(){
 		NProgress.done();
 	})
-	NProgress.done();
 })
-function getContentData(api){
+function back(){
+	var path = g_getAnchorString();
+	loadHTMLData(path,"content");
+}
+function filmEdit(obj){
+	var href = obj.dataset.href;
+	loadHTML(href,'content');
+}
+function loadHTML(api,id){
 	$.ajax({
 		url:api,
 		type:'get',
-		data:{async:'true'},
+		success:function(html){
+				$('#'+id).html(html);
+		}
+	});
+}
+function loadHTMLData(api,id){
+	$.ajax({
+		url:api,
+		type:'get',
+		data:{async:true},
 		success:function(data){
 			if(data.code == 0){
-				$("#content").html(data.data);
+				$('#'+id).html(data.data);
+			}else{
+				//这里应该放出错误页面
 			}
 		}
 	});

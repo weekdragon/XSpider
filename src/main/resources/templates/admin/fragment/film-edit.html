@@ -159,12 +159,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 		<!-- Content Wrapper. Contains page content -->
 		<div id="content" class="content-wrapper" th:fragment="film">
-				<!-- Content Header (Page header) -->
+			<!-- Content Header (Page header) -->
 			<div class="content-header">
 				<div class="container-fluid">
 					<div class="row mb-2">
 						<div class="col-sm-6">
-							<h1 class="m-0 text-dark">电影管理</h1>
+							<h1 class="m-0 text-dark">编辑</h1>
 						</div>
 						<!-- /.col -->
 						<div class="col-sm-6">
@@ -172,7 +172,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 								<li class="breadcrumb-item">
 									<a href="/admin/index">主页</a>
 								</li>
-								<li class="breadcrumb-item active">电影管理</li>
+								<li class="breadcrumb-item">
+									<a href="/admin/index#film">电影管理</a>
+								</li>
+								<li class="breadcrumb-item active">编辑</li>
 							</ol>
 						</div>
 						<!-- /.col -->
@@ -182,60 +185,59 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				<!-- /.container-fluid -->
 			</div>
 			<!-- /.content-header -->
-			<section class="content">
-				<div class="row">
-					<div class="col-12">
-						<div class="card">
-							<div class="card-header">
-								<h1 class="card-title">电影管理</h1>
+			<section class="content" style="minHeight: 600px;">
+				<div class="content-fluid">
+
+					<div class="row">
+						<div class="col-lg-9 col-md-12">
+							<div class="card">
+								<div class="card-header">
+									<div class="text-right">
+										<button class="btn btn-outline-secondary" onClick="back()">返回</button>
+										<button class="btn btn-outline-primary" onClick="save_film()">发布</button>
+									</div>
+								</div>
+								<form id="film-edit" role="form">
+									<div class="card-body">
+										<input name="id" th:value="${film.id}" type="hidden" class="form-control">
+										<div class="form-group">
+											<label for="title">标题</label>
+											<input name="fullTitle" th:value="${film.fullTitle}" type="text" class="form-control" id="title" placeholder="请输入标题">
+										</div>
+										<div class="form-group">
+											<label for="short-title">短标题</label>
+											<input name="shortTitle" th:value="${film.shortTitle}" type="text" class="form-control" id="short-title" placeholder="请输入短标题">
+										</div>
+										<div class="form-group">
+											<label for="show-time">上映时间</label>
+											<input name="showTime" th:value="${film.showTime}" type="text" class="form-control" id="show-time" placeholder="请输入上映时间">
+										</div>
+										<div class="form-group">
+											<label for="origin">来源</label>
+											<input name="webSiteFlagString" th:value="${film.webSiteFlagString}" type="text" class="form-control" id="show-time" placeholder="请输入资源来源">
+										</div>
+										<div class="form-group">
+											<label for="rank">评分</label>
+											<input name="rank" th:value="${film.rank}" type="text" class="form-control" id="rank" placeholder="请输入评分">
+										</div>
+										<div class="form-group">
+											<label for="origin-link">来源链接</label>
+											<input name="detailUrl" th:value="${film.detailUrl}" type="text" class="form-control" id="origin-link" placeholder="请输入来源链接">
+										</div>
+										<div class="form-group">
+											<label>简介</label>
+											<textarea name="briefCnt" th:text="${film.briefCnt}" class="form-control" rows="5" placeholder="请输入简介 ..."></textarea>
+										</div>
+									</div>
+								</form>
 							</div>
-							<!-- /.card-header -->
-							<div class="card-body">
-								<table id="film-table" class="table table-bordered table-striped">
-									<thead>
-										<tr>
-											<th>
-												<input type="checkbox" class="checkall" />
-											</th>
-											<th>ID</th>
-											<th>标题</th>
-											<th>上映时间</th>
-											<th>详情</th>
-											<th>来源</th>
-											<th>编辑</th>
-											<th>浏览</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr th:each="film:${films}">
-											<td>
-												<input type="checkbox" class="checkall" />
-											</td>
-											<td th:text="${film.id}"></td>
-											<td th:text="${film.shortTitle}"></td>
-											<td th:text="${film.showTime}"></td>
-											<td th:text="${film.detailUrl}"></td>
-											<td>某某网</td>
-											<td><a href="javascript:;" class="btn btn-primary" th:attr="data-href='film/' + ${film.id} + '/to_edit'" onClick="filmEdit(this)">编辑</a></td>
-											<td><a href="javascript:;" class="btn btn-danger">删除</a></td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-							<!-- /.card-body -->
 						</div>
-						<!-- /.card -->
 					</div>
-					<!-- /.col -->
 				</div>
-				<!-- /.row -->
 			</section>
-			<!-- /.content -->
-			<script>
-				$(function() {
-					$("#film-table").DataTable();
-				});
-			</script>
+			<!-- film edit js -->
+			<script th:src="@{/js/film_edit.js}"></script>
+			<script th:src="@{/plugins/layer/layer.js}"></script>
 		</div>
 		<!-- /.content-wrapper -->
 

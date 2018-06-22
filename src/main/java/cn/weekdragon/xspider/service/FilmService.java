@@ -13,12 +13,16 @@ public class FilmService {
 
 	@Autowired
 	private FilmRepository filmRepository;
-	public Film saveFilm(Film film) {
+	public Film insertDistinctFilm(Film film) {
 		Film film2 = filmRepository.findFilmByFullTitleAndDetailUrl(film.getFullTitle(), film.getDetailUrl());
 		if(film2 == null) {
 			return filmRepository.save(film);
 		}
 		return film2;
+	}
+	
+	public Film saveFilm(Film film) {
+			return filmRepository.save(film);
 	}
 
 	public Page<Film> listNewestFilms(String keyword, Pageable pageable) {
@@ -27,5 +31,9 @@ public class FilmService {
 	
 	public Page<Film> listFilms(Pageable pageable) {
 		return filmRepository.findAll(pageable);
+	}
+	
+	public Film getFilmById(Integer id) {
+		return filmRepository.findOne(Long.valueOf(id));
 	}
 }

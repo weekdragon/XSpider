@@ -16,6 +16,7 @@ public class Film {
     @GeneratedValue(strategy=GenerationType.IDENTITY) // 自增长策略
 	private Long id;
 	private int webSiteFlag;
+	private String webSiteFlagString;
 	@Column(nullable = false) //全名
 	private String fullTitle;
 	@Column
@@ -47,7 +48,12 @@ public class Film {
 	@org.hibernate.annotations.CreationTimestamp  // 由数据库自动创建时间
 	private Timestamp createTime;
 	
-	
+	public String getWebSiteFlagString() {
+		return webSiteFlagString;
+	}
+	public void setWebSiteFlagString(String webSiteFlagString) {
+		this.webSiteFlagString = webSiteFlagString;
+	}
 	public List<String> getCategory() {
 		return category;
 	}

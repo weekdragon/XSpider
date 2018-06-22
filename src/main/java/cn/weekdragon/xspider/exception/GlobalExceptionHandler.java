@@ -18,7 +18,7 @@ import cn.weekdragon.xspider.result.Result;
 public class GlobalExceptionHandler {
 	@ExceptionHandler(value=Exception.class)
 	public Result<String> exceptionHandler(HttpServletRequest request, Exception e){
-//		e.printStackTrace();
+		e.printStackTrace();
 		if(e instanceof GlobalException) {
 			GlobalException ex = (GlobalException)e;
 			return Result.error(ex.getCm());
