@@ -23,6 +23,7 @@ import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
 
 import cn.weekdragon.xspider.config.XspiderConfig;
 import cn.weekdragon.xspider.domain.User;
+import cn.weekdragon.xspider.exception.GlobalException;
 import cn.weekdragon.xspider.result.CodeMsg;
 import cn.weekdragon.xspider.result.Result;
 import cn.weekdragon.xspider.vo.ServerInfo;
@@ -47,29 +48,17 @@ public class AdminController {
 		return "admin/index";
 	}
 
-	@ResponseBody
-	@GetMapping("/console")
-	public Result<String> console(@RequestParam(value = "async", required = false) boolean async, User user, Model model,HttpServletRequest request,HttpServletResponse response) {
+	@GetMapping("/dashboard")
+	public String console(@RequestParam(value = "async", required = false) boolean async, User user, Model model,HttpServletRequest request,HttpServletResponse response) {
 		if (user == null) {
-			return Result.error(CodeMsg.SESSION_ERROR);
+			throw new GlobalException(CodeMsg.SESSION_ERROR);
 		}
 		// 首次访问页面才加载
 		if (!async) {
 			model.addAttribute("username", user.getNickName());
 		}
 		model.addAttribute("infos", wrapServerInfo());
-		// 手动渲染
-		WebContext ctx = new WebContext(request, response, request.getServletContext(), request.getLocale(), model.asMap());
-		thymeleafViewResolver.setSuffix(".html");
-		SpringTemplateEngine engine = new SpringTemplateEngine();
-		engine.setTemplateResolver(thymeleafViewResolver);
-		Set<String> selectors = new HashSet<>();
-		if (async == true) {
-			selectors.add("#content");
-		}
-
-		String html = engine.process("admin/fragment/console", selectors, ctx);
-		return Result.success(html);
+		return async == true?"admin/fragment/dashboard :: #content":"admin/fragment/dashboard";
 	}
 
 	public List<ServerInfo> wrapServerInfo() {

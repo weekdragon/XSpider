@@ -10,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import cn.weekdragon.xspider.util.Constants;
+
 @Entity
 public class Film {
 	@Id  // 主键
@@ -44,12 +46,12 @@ public class Film {
 	@ElementCollection
 	private List<String> sourceUrl;
 	
-	@Column(nullable = false) // 映射为字段，值不能为空
-	@org.hibernate.annotations.CreationTimestamp  // 由数据库自动创建时间
+	@Column(nullable = false,updatable=false) // 映射为字段，值不能为空
+	@org.hibernate.annotations.CreationTimestamp()  // 由数据库自动创建时间
 	private Timestamp createTime;
 	
 	public String getWebSiteFlagString() {
-		return webSiteFlagString;
+		return webSiteFlagString == null?Constants.getWebSiteFlagString(webSiteFlag):webSiteFlagString;
 	}
 	public void setWebSiteFlagString(String webSiteFlagString) {
 		this.webSiteFlagString = webSiteFlagString;
@@ -95,6 +97,7 @@ public class Film {
 	}
 	public void setWebSiteFlag(int webSiteFlag) {
 		this.webSiteFlag = webSiteFlag;
+		setWebSiteFlagString(Constants.getWebSiteFlagString(webSiteFlag));
 	}
 	public String getShortTitle() {
 		return shortTitle;

@@ -36,4 +36,12 @@ public class FilmService {
 	public Film getFilmById(Integer id) {
 		return filmRepository.findOne(Long.valueOf(id));
 	}
+	
+	public void deleteFilm(Long id) {
+		filmRepository.delete(id);
+	}
+	
+	public void deleteFilm(Film film) {
+		filmRepository.delete(film);
+	}
 }

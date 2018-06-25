@@ -215,9 +215,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 											<td th:text="${film.shortTitle}"></td>
 											<td th:text="${film.showTime}"></td>
 											<td th:text="${film.detailUrl}"></td>
-											<td>某某网</td>
+											<td th:text="${film.webSiteFlagString}"></td>
 											<td><a href="javascript:;" class="btn btn-primary" th:attr="data-href='film/' + ${film.id} + '/to_edit'" onClick="filmEdit(this)">编辑</a></td>
-											<td><a href="javascript:;" class="btn btn-danger">删除</a></td>
+											<td><a href="javascript:;" class="btn btn-danger" th:attr="data-href='film/' + ${film.id} + '/to_delete'" onClick="filmDelete(this)">删除</a></td>
 										</tr>
 									</tbody>
 								</table>
@@ -232,8 +232,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			</section>
 			<!-- /.content -->
 			<script>
+				var table;
 				$(function() {
-					$("#film-table").DataTable();
+					table = $("#film-table").DataTable();
 				});
 			</script>
 		</div>
