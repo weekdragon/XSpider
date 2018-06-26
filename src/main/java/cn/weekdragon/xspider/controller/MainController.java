@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import cn.weekdragon.xspider.domain.Film;
 import cn.weekdragon.xspider.repository.FilmRepository;
 import cn.weekdragon.xspider.service.FilmService;
+import cn.weekdragon.xspider.util.Constants;
 
 @Controller
 public class MainController {
@@ -36,11 +37,6 @@ public class MainController {
 		model.addAttribute("films",films);
 		model.addAttribute("page", page);
 		
-		return "default/index";
-	}
-	
-	@GetMapping("/test")
-	public String test() {
-		return "test";
+		return Constants.FET + "/index";
 	}
 }

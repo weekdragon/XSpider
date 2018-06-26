@@ -21,7 +21,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 </head>
 <body class="hold-transition sidebar-mini">
 	<div class="wrapper">
-
 		<!-- Navbar -->
 		<nav class="main-header navbar navbar-expand bg-white navbar-light border-bottom">
 			<!-- Left navbar links -->
@@ -159,6 +158,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 		<!-- Content Wrapper. Contains page content -->
 		<div id="content" class="content-wrapper" th:fragment="film">
+
 			<!-- Content Header (Page header) -->
 			<div class="content-header">
 				<div class="container-fluid">
@@ -187,7 +187,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			<!-- /.content-header -->
 			<section class="content" style="minHeight: 600px;">
 				<div class="content-fluid">
-
 					<div class="row">
 						<div class="col-lg-9 col-md-12">
 							<div class="card">
@@ -207,6 +206,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 										<div class="form-group">
 											<label for="short-title">短标题</label>
 											<input name="shortTitle" th:value="${film.shortTitle}" type="text" class="form-control" id="short-title" placeholder="请输入短标题">
+										</div>
+										<div class="form-group">
+											<label for="category">标签</label>
+											<input name="category" class="tags" type="text" id="category">
+										</div>
+										<div class="form-group">
+											<label for="imgUrl">预览图</label>
+											<input name="imgUrl" th:value="${film.imgUrl}" type="text" class="form-control" id="imgUrl" placeholder="请输入预览图片链接">
 										</div>
 										<div class="form-group">
 											<label for="show-time">上映时间</label>
@@ -236,6 +243,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				</div>
 			</section>
 			<!-- film edit js -->
+			<script th:inline="javascript">
+			var categoryList = [[${film.category}]];
+			var category = categoryList.join(',');
+			$("#category").val(category);
+			</script>
 			<script th:src="@{/js/film_edit.js}"></script>
 			<script th:src="@{/plugins/layer/layer.js}"></script>
 		</div>

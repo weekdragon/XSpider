@@ -5,6 +5,11 @@ import java.util.Map;
 
 public class Constants {
 
+	//前端模板前缀
+	public static String FET = "default";
+	//后端模板前缀
+	public static String BET = "admin";
+	
 	/**
 	 * 胖鸟网 http://www.pniao.com/
 	 */

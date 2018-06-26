@@ -33,8 +33,8 @@ public class FilmService {
 		return filmRepository.findAll(pageable);
 	}
 	
-	public Film getFilmById(Integer id) {
-		return filmRepository.findOne(Long.valueOf(id));
+	public Film getFilmById(Long id) {
+		return filmRepository.findOne(id);
 	}
 	
 	public void deleteFilm(Long id) {

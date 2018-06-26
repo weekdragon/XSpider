@@ -1,6 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head th:include="default/header::header">
 </head>
 <body>
@@ -10,48 +9,43 @@
 			<div class="col-md-12">
 				<div id="mainContainer">
 					<div id="mainContainerRepleace">
-					
 						<div class="card flex-md-row mb-4 box-shadow h-md-250" th:each="film:${films}">
 							<div class="card-body d-flex flex-column ">
-							
-								<h2 class = "card-title">
-									<a th:href="${film.detailUrl}" class="btn-link" target="blank"
-										th:text="${film.fullTitle}">自行车都智能化了，你可知道它的历史？</a>
+								<h2 class="card-title">
+									<a th:href="${'film/' +film.id}" class="btn-link" target="_blank" th:text="${film.fullTitle}"></a>
 								</h2>
 								<div class="small m-b-xs">
-									<strong>发布时间：</strong> <span class="text-muted"
-										th:text="${film.showTime}"><i class="fa fa-clock-o"></i>
-										9 小时前</span>
+									<strong>发布时间：</strong>
+									<span class="text-muted" th:text="${film.createTime}">
+										<i class="fa fa-clock-o"></i>
+									</span>
 								</div>
-								<p class="briefCnt" th:text="${film.briefCnt}">
-									在不少旁观者的眼里，智能化几乎成了一种避之唯恐不及的“瘟疫”，开始攀附上大大小小、各式各样的工具和设备，从水杯、灯泡、体重秤这样的小物件，再到冰箱、洗衣机这些生活中的庞然大物。
-								</p>
+								<p class="briefCnt" th:text="${film.briefCnt}"></p>
 								<div class="row">
 									<div class="col-md-6">
-										<div class="card-text large text-left">分类：
-											<span class = "badge badge-secondary" th:each="s:${film.category}" th:text="${s}"></span>
+										<div class="card-text large text-left">
+											分类：
+											<span class="badge badge-secondary" th:each="s:${film.category}" th:text="${s}"></span>
 										</div>
 									</div>
 									<div class="col-md-6">
 										<div class="card-text small text-right">
-											<i class="fa fa-comments-o"> </i> - 评论
-											<i class="fa fa-eye"> </i> - 浏览
+											<i class="fa fa-comments-o"> </i>
+											- 评论
+											<i class="fa fa-eye"> </i>
+											- 浏览
 										</div>
 									</div>
 								</div>
 							</div>
 							<img class="card-img-right flex-auto d-none d-md-block preveiw" th:src="${film.imgUrl}" alt="预览图片">
 						</div>
-						
-		      			<div th:replace="~{default/page :: page}">...</div>
-		      		</div>
-	      		</div>
+						<div th:replace="~{default/page :: page}">...</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
-<div th:replace="default/footer::footer"></div>
-<script src="../../js/index.js" th:src="@{/js/index.js}"></script>
-
+	<div th:replace="default/footer::footer"></div>
 </body>
-
 </html>

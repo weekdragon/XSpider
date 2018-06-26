@@ -84,9 +84,7 @@ function loadHTML(api, id) {
 	$.get(api, {
 		async : true
 	}, function(html,textStatus,jqXHR) {
-		console.log(textStatus);
 		if(textStatus == 'success'){
-			console.log(1);
 			$('#' + id).html(html);
 		}
 	})

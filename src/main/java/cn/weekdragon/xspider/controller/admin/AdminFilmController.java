@@ -77,7 +77,7 @@ public class AdminFilmController {
 	}
 	
 	@RequestMapping("/film/{id}/to_edit")
-	public String toFilmEdit(@PathVariable("id") Integer id,Model model) {
+	public String toFilmEdit(@PathVariable("id") Long id,Model model) {
 		if(id == null) {
 			throw new GlobalException(CodeMsg.REQUEST_ILLEGAL);
 		}
@@ -95,10 +95,10 @@ public class AdminFilmController {
 	@ResponseBody
 	@RequestMapping("/film/edit")
 	public CodeMsg filmEdit(@RequestBody String json) {
+		System.out.println(json);
 		Film film = RedisService.stringToBean(json, Film.class);
 		filmService.saveFilm(film);
 		redisService.delete(FilmKey.getById,film.getId()+"");
-		System.out.println(json);
 		return CodeMsg.SUCCESS;
 	}
 	
