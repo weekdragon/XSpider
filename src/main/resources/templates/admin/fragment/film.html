@@ -208,7 +208,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 											<th>浏览</th>
 										</tr>
 									</thead>
-								
+
 								</table>
 							</div>
 							<!-- /.card-body -->
@@ -230,49 +230,60 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					$(".checkChildren").click(function() {
 						$("#checkall").prop('checked', $("input[class='checkChildren']:checked").length == $(".checkChildren").length);
 					});
-					table = $("#film-table").DataTable({
-						"processing" : true,//刷新的那个对话框
-						"serverSide" : true,//服务器端获取数据
-						"ajax" : {
-							"url" : "films",
-							"type" : "POST",
-						},
-						"columns" : [ {
-							"sortable" : false,
-							"data" : "id",
-							"render" : function(data, type, full, meta) {
-								return '<input type="checkbox"  class="checkChildren"  data-id="' + data + '" />';
-							}
-						}, {
-							"data" : "id"
-						},{
-							"sortable" : false,
-							"data" : "id",
-							"render" : function(data, type, full, meta) {
-								return '<a href="/film/'+data+'" target="_blank"><i class="fa fa-search-plus" aria-hidden="true"></i></a>';
-							},
-						}, {
-							"data" : "shortTitle"
-						}, {
-							"data" : "showTime"
-						}, {
-							"data" : "detailUrl"
-						}, {
-							"data" : "webSiteFlagString"
-						}, {
-							"sortable" : false,
-							"data" : "id",
-							"render" : function(data, type, full, meta) {
-								return '<a href="#film-'+data+'-to_edit" class="btn btn-primary">编辑</a>'
-							},
-						}, {
-							"sortable" : false,
-							"data" : "id",
-							"render" : function(data, type, full, meta) {
-								return '<a href="javascript:;" class="btn btn-danger" th:attr="data-href=\'film/' +data + '/to_delete\'" onClick="filmDelete(this)">删除</a>'
-							},
-						} ]
-					});
+					table = $("#film-table").DataTable(
+							{
+								"processing" : true,//刷新的那个对话框
+								"serverSide" : true,//服务器端获取数据
+								"ajax" : {
+									"url" : "films",
+									"type" : "POST",
+								},
+								"columns" : [
+										{
+											"sortable" : false,
+											"data" : "id",
+											"render" : function(data, type, full, meta) {
+												return '<input type="checkbox"  class="checkChildren"  data-id="' + data + '" />';
+											}
+										},
+										{
+											"data" : "id"
+										},
+										{
+											"sortable" : false,
+											"data" : "id",
+											"render" : function(data, type, full, meta) {
+												return '<a href="/film/'+data+'" target="_blank"><i class="fa fa-search-plus" aria-hidden="true"></i></a>';
+											},
+										},
+										{
+											"data" : "shortTitle"
+										},
+										{
+											"data" : "showTime"
+										},
+										{
+											"data" : "detailUrl"
+										},
+										{
+											"data" : "webSiteFlagString"
+										},
+										{
+											"sortable" : false,
+											"data" : "id",
+											"render" : function(data, type, full, meta) {
+												return '<a href="#film-'+data+'-to_edit" class="btn btn-primary">编辑</a>'
+											},
+										},
+										{
+											"sortable" : false,
+											"data" : "id",
+											"render" : function(data, type, full, meta) {
+												return '<a href="javascript:;" class="btn btn-danger" th:attr="data-href=\'film/' + data
+														+ '/to_delete\'" onClick="filmDelete(this)">删除</a>'
+											},
+										} ]
+							});
 				});
 			</script>
 		</div>
