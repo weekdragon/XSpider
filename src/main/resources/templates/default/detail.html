@@ -10,7 +10,7 @@
 					<div class="card-body d-flex flex-column ">
 						<h1 th:text='${film.fullTitle}'></h1>
 						<div class="row">
-							<div class=" col-lg-3">
+							<div class=" col-md-3">
 								<img class="card-img-right flex-auto d-none d-md-block preveiw" th:src="${film.imgUrl}" alt="预览图片">
 							</div>
 							<div class="col-lg-9 pd-0">
@@ -22,7 +22,7 @@
 									<span>上映时间：</span>
 									<span class="text-muted" th:text='${film.showTime}'></span>
 								</div>
-								<div th:if="${#lists.size(film.category)>0}" class="text-muted">
+								<div th:if="${#lists.size(film.category)>0 and film.category[0]!=''}" class="text-muted">
 									<span>标签：</span>
 									<span th:each="category:${film.category}" >
 										<span  th:text='${category}' class="badge badge-secondary">111</span>
@@ -47,7 +47,7 @@
 							<dd th:text="${film.briefCnt}"></dd>
 							<dt>下载地址：</dt>
 							<dd>
-								<table class="table table-hover table-striped mt-3">
+								<table class="table  table-striped mt-3"  style="word-break:break-all;">
 									<thead>
 										<tr>
 											<td>#</td>
@@ -56,15 +56,15 @@
 											<td>下载</td>
 										</tr>
 									</thead>
-									<tbody>
+									<tbody th:each="downloadLinks:${film.sourceUrl}">
 										<tr>
 											<td>1</td>
 											<td>
-												<span class="badge badge-secondary">迅雷</span>
+												<span class="label badge badge-danger" th:text="${downloadLinks.type}"></span>
 											</td>
-											<td class="text-secondary"><a href="#" th:text="是是是是是事实上我是说明啊"></a></td>
+											<td class="text-secondary"><a th:href="${downloadLinks.link}" th:text="${downloadLinks.description}"></a></td>
 											<td>
-												<a href="javascript:;" th:text="下载" class="btn btn-sm btn-secondary"></a>
+												<a th:href="${downloadLinks.link}" th:text="下载" class="btn btn-sm btn-secondary"></a>
 											</td>
 										</tr>
 									</tbody>

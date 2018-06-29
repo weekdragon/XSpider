@@ -36,26 +36,54 @@ function loadPage(path) {
 	if (path === '') {
 		path = "dashboard";
 	}
-	reactSideBar(path);
-	console.info('path = ' + path);
-	loadHTML(path, "content");
+	reactSideBar(path.split('_')[0]);
+	var realPath = path.replace(/-/g, '/');
+	console.info('realPath = ' + realPath);
+	loadHTML(realPath, "content");
 }
-function reactSideBar(path){
-	var current = $(".nav-sidebar a[data-href="+path+"]")[0];
-	if(current != null){
+function reactSideBar(path) {
+	var current = $(".nav-sidebar a[data-href=" + path + "]")[0];
+	if (current != null) {
 		$(".nav-sidebar a").removeClass('active');
 		$(".nav-sidebar a").removeClass('menu-open');
 		$(current).parents(".has-treeview").addClass('menu-open')
 		$(current).addClass('active');
 	}
 }
-function back() {
-	var path = g_getAnchorString();
-	loadHTML(path, "content");
-}
 function filmEdit(obj) {
 	var href = obj.dataset.href;
 	loadHTML(href, 'content');
+}
+function batFilmDelete(ids) {
+	var selects = $("input[class='checkChildren']:checked");
+	if(selects.length == 0){
+		layer.msg("未选择任何项");
+		return;
+	}
+	var array = new Array();
+	selects.each(function(i){
+		array.push($(this).attr('data-id'));
+	})
+	var args = array.join('_');
+	layer.confirm('你确定要删除这些项吗?', {
+		btn : [ '确定', '取消' ]
+	// 按钮
+	}, function(index) {
+		var href = 'film\\'+args+'\\to_delete';
+		$.ajax({
+			url : href,
+			type : 'get',
+			success : function(data) {
+				if (data.code == 0) {
+					selects.each(function(i){
+						table.row($(this).parents('tr')).remove().draw();
+					})
+				}
+			}
+		});
+		layer.close(index);
+	}, function() {
+	});
 }
 function filmDelete(obj) {
 	layer.confirm('你确定要删除此项吗?', {
@@ -69,7 +97,6 @@ function filmDelete(obj) {
 			success : function(data) {
 				if (data.code == 0) {
 					table.row($(obj).parents('tr')).remove().draw();
-					$(obj).parent().parent().remove();
 				}
 			}
 		});
@@ -83,8 +110,8 @@ function loadHTML(api, id) {
 	});
 	$.get(api, {
 		async : true
-	}, function(html,textStatus,jqXHR) {
-		if(textStatus == 'success'){
+	}, function(html, textStatus, jqXHR) {
+		if (textStatus == 'success') {
 			$('#' + id).html(html);
 		}
 	})

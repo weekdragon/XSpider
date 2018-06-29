@@ -159,7 +159,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 		<!-- Content Wrapper. Contains page content -->
 		<div id="content" class="content-wrapper" th:fragment="film">
-				<!-- Content Header (Page header) -->
+			<!-- Content Header (Page header) -->
 			<div class="content-header">
 				<div class="container-fluid">
 					<div class="row mb-2">
@@ -187,8 +187,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					<div class="col-12">
 						<div class="card">
 							<div class="card-header">
-								<a class="btn btn-outline-secondary">新增</a>
-								<a class="btn btn-outline-secondary">删除</a>
+								<a href="#film-add" class="btn btn-outline-secondary">新增</a>
+								<a class="btn btn-outline-secondary" onClick="batFilmDelete()">删除</a>
 							</div>
 							<!-- /.card-header -->
 							<div class="card-body">
@@ -196,10 +196,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 									<thead>
 										<tr>
 											<th>
-												<input type="checkbox" class="checkall" />
+												<input type="checkbox" id="checkall" />
 											</th>
 											<th>ID</th>
-											<th>标题</th>
+											<th>查看</th>
+											<th>短标题</th>
 											<th>上映时间</th>
 											<th>详情</th>
 											<th>来源</th>
@@ -207,20 +208,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 											<th>浏览</th>
 										</tr>
 									</thead>
-									<tbody>
-										<tr th:each="film:${films}">
-											<td>
-												<input type="checkbox" class="checkall" />
-											</td>
-											<td th:text="${film.id}"></td>
-											<td th:text="${film.shortTitle}"></td>
-											<td th:text="${film.showTime}"></td>
-											<td th:text="${film.detailUrl}"></td>
-											<td th:text="${film.webSiteFlagString}"></td>
-											<td><a href="javascript:;" class="btn btn-primary" th:attr="data-href='film/' + ${film.id} + '/to_edit'" onClick="filmEdit(this)">编辑</a></td>
-											<td><a href="javascript:;" class="btn btn-danger" th:attr="data-href='film/' + ${film.id} + '/to_delete'" onClick="filmDelete(this)">删除</a></td>
-										</tr>
-									</tbody>
+								
 								</table>
 							</div>
 							<!-- /.card-body -->
@@ -235,7 +223,56 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			<script>
 				var table;
 				$(function() {
-					table = $("#film-table").DataTable();
+					$("#checkall").click(function() {
+						var checked = $("#checkall").is(':checked');
+						$(".checkChildren").prop('checked', checked);
+					});
+					$(".checkChildren").click(function() {
+						$("#checkall").prop('checked', $("input[class='checkChildren']:checked").length == $(".checkChildren").length);
+					});
+					table = $("#film-table").DataTable({
+						"processing" : true,//刷新的那个对话框
+						"serverSide" : true,//服务器端获取数据
+						"ajax" : {
+							"url" : "films",
+							"type" : "POST",
+						},
+						"columns" : [ {
+							"sortable" : false,
+							"data" : "id",
+							"render" : function(data, type, full, meta) {
+								return '<input type="checkbox"  class="checkChildren"  data-id="' + data + '" />';
+							}
+						}, {
+							"data" : "id"
+						},{
+							"sortable" : false,
+							"data" : "id",
+							"render" : function(data, type, full, meta) {
+								return '<a href="/film/'+data+'" target="_blank"><i class="fa fa-search-plus" aria-hidden="true"></i></a>';
+							},
+						}, {
+							"data" : "shortTitle"
+						}, {
+							"data" : "showTime"
+						}, {
+							"data" : "detailUrl"
+						}, {
+							"data" : "webSiteFlagString"
+						}, {
+							"sortable" : false,
+							"data" : "id",
+							"render" : function(data, type, full, meta) {
+								return '<a href="#film-'+data+'-to_edit" class="btn btn-primary">编辑</a>'
+							},
+						}, {
+							"sortable" : false,
+							"data" : "id",
+							"render" : function(data, type, full, meta) {
+								return '<a href="javascript:;" class="btn btn-danger" th:attr="data-href=\'film/' +data + '/to_delete\'" onClick="filmDelete(this)">删除</a>'
+							},
+						} ]
+					});
 				});
 			</script>
 		</div>

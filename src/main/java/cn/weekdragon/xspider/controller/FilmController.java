@@ -57,7 +57,6 @@ public class FilmController {
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("page", page);
 		model.addAttribute("films", list);
-		
 		return (async==true?Constants.FET + "/index :: #mainContainerRepleace" : Constants.FET + "/index");
 	}
 	
@@ -68,6 +67,8 @@ public class FilmController {
 		if(film == null) {
 			throw new GlobalException(CodeMsg.REQUEST_ILLEGAL);
 		}
+		film.setViews(film.getViews()+1);
+		filmService.saveFilm(film);
 		model.addAttribute("film", film);
 		return Constants.FET + "/detail";
 	}

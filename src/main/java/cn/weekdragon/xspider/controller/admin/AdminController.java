@@ -34,8 +34,6 @@ public class AdminController {
 
 	@Autowired
 	private XspiderConfig xspiderConfig;
-	@Autowired
-	private SpringResourceTemplateResolver thymeleafViewResolver;
 
 	@GetMapping("/index")
 	public String index(User user, Model model) {

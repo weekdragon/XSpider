@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import cn.weekdragon.xspider.domain.Film;
 import cn.weekdragon.xspider.util.Constants;
 
-@Component
+//@Component
 public class PNiaoSpider extends AbstractSpider {
 
 

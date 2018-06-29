@@ -164,7 +164,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				<div class="container-fluid">
 					<div class="row mb-2">
 						<div class="col-sm-6">
-							<h1 class="m-0 text-dark">编辑</h1>
+							<h1 class="m-0 text-dark" th:text = "${film.id == null ?'新增':'编辑'}">编辑</h1>
 						</div>
 						<!-- /.col -->
 						<div class="col-sm-6">
@@ -175,7 +175,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 								<li class="breadcrumb-item">
 									<a href="/admin/index#film">电影管理</a>
 								</li>
-								<li class="breadcrumb-item active">编辑</li>
+								<li class="breadcrumb-item active" th:text = "${film.id == null ?'新增':'编辑'}" >编辑</li>
 							</ol>
 						</div>
 						<!-- /.col -->
@@ -192,8 +192,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 							<div class="card">
 								<div class="card-header">
 									<div class="text-right">
-										<button class="btn btn-outline-secondary" onClick="back()">返回</button>
-										<button class="btn btn-outline-primary" onClick="save_film()">发布</button>
+										<a href="#film" class="btn btn-outline-secondary">返回</a>
+										<a href="#film" class="btn btn-outline-primary" onClick="save_film()">发布</a>
 									</div>
 								</div>
 								<form id="film-edit" role="form">
@@ -245,8 +245,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			<!-- film edit js -->
 			<script th:inline="javascript">
 			var categoryList = [[${film.category}]];
-			var category = categoryList.join(',');
-			$("#category").val(category);
+			if(categoryList!=null){
+				var category = categoryList.join(',');
+				$("#category").val(category);
+			}
 			</script>
 			<script th:src="@{/js/film_edit.js}"></script>
 			<script th:src="@{/plugins/layer/layer.js}"></script>

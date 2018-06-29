@@ -27,17 +27,18 @@ import cn.weekdragon.xspider.redis.FilmKey;
 import cn.weekdragon.xspider.redis.RedisService;
 import cn.weekdragon.xspider.result.CodeMsg;
 import cn.weekdragon.xspider.service.FilmService;
+import cn.weekdragon.xspider.vo.PageVo;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminFilmController {
-	
+
 	@Autowired
 	private RedisService redisService;
 	@Autowired
 	private FilmService filmService;
 
-	@AccessLimit(needLogin=true,maxCount = 5,seconds=5)
+	@AccessLimit(needLogin = true, maxCount = 5, seconds = 5)
 	@RequestMapping("/film")
 	public String listFilms(@RequestParam(value = "order", required = false, defaultValue = "new") String order,
 			@RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
@@ -62,8 +63,8 @@ public class AdminFilmController {
 		}
 
 		list = page.getContent(); // 当前所在页面数据列表
-		
-		model.addAttribute("test","test");
+
+		model.addAttribute("test", "test");
 		model.addAttribute("order", order);
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("page", page);
@@ -75,41 +76,67 @@ public class AdminFilmController {
 		}
 		return async == true ? "admin/fragment/film::#content" : "admin/fragment/film";
 	}
-	
+
+	@ResponseBody
+	@RequestMapping("/films")
+	public String listJsonFilms(@RequestParam(name = "draw") Integer draw, @RequestParam(name = "start") Integer start,
+			@RequestParam(name = "length") Integer length) {
+		Pageable pageable = new PageRequest(start/length, length);
+		Page<Film> listFilms = filmService.listFilms(pageable);
+		Long totalElements = listFilms.getTotalElements();
+		PageVo pageVo = new PageVo();
+		pageVo.setDraw(draw);
+		pageVo.setRecordsFiltered(totalElements.intValue());
+		pageVo.setRecordsTotal(totalElements.intValue());
+		pageVo.setData(listFilms.getContent());
+		return RedisService.beanToString(pageVo);
+	}
+
+	@RequestMapping("/film/add")
+	public String toFilmAdd(Model model) {
+		Film film = new Film();
+		model.addAttribute("film", film);
+		return "admin/fragment/film-edit :: #content";
+	}
+
 	@RequestMapping("/film/{id}/to_edit")
-	public String toFilmEdit(@PathVariable("id") Long id,Model model) {
-		if(id == null) {
+	public String toFilmEdit(@PathVariable("id") Long id, Model model) {
+		if (id == null) {
 			throw new GlobalException(CodeMsg.REQUEST_ILLEGAL);
 		}
-		Film film = redisService.get(FilmKey.getById, id+"", Film.class);
-		if(film == null) {
+		Film film = redisService.get(FilmKey.getById, id + "", Film.class);
+		if (film == null) {
 			film = filmService.getFilmById(id);
-			if(film!=null) {
-				redisService.set(FilmKey.getById, id+"", film);
+			if (film != null) {
+				redisService.set(FilmKey.getById, id + "", film);
 			}
 		}
 		model.addAttribute("film", film);
 		return "admin/fragment/film-edit :: #content";
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("/film/edit")
 	public CodeMsg filmEdit(@RequestBody String json) {
 		System.out.println(json);
 		Film film = RedisService.stringToBean(json, Film.class);
 		filmService.saveFilm(film);
-		redisService.delete(FilmKey.getById,film.getId()+"");
+		redisService.delete(FilmKey.getById, film.getId() + "");
 		return CodeMsg.SUCCESS;
 	}
-	
+
 	@ResponseBody
-	@AccessLimit(needLogin=true, maxCount = 5, seconds = 5)
+	@AccessLimit(needLogin = true, maxCount = 5, seconds = 5)
 	@RequestMapping("/film/{id}/to_delete")
-	public CodeMsg toFilmDelete(@PathVariable("id") Long id,Model model) {
-		if(id == null) {
-			throw new GlobalException(CodeMsg.REQUEST_ILLEGAL);
+	public CodeMsg toFilmDelete(@PathVariable(name = "id", required = true) String ids, Model model) {
+		String[] split = ids.split("_");
+		for (String id : split) {
+			try {
+				filmService.deleteFilm(Long.parseLong(id));
+			} catch (Exception e) {
+				throw new GlobalException(CodeMsg.REQUEST_ILLEGAL);
+			}
 		}
-		filmService.deleteFilm(id);
 		return CodeMsg.SUCCESS;
 	}
 }

@@ -18,7 +18,8 @@ $(function(){
                 $(this).css('background-color', 'red');
             });
         },
-        defaultText:'添加标签'
+        defaultText:'添加标签',
+        height:'50px'
       });
 })
 function save_film() {
@@ -32,8 +33,7 @@ function save_film() {
 		contentType : "application/json",
 		success : function(data) {
 			if (data.code == 0) {
-				layer.msg("修改成功");
-				back();
+				layer.msg("操作成功");
 			}
 		}
 	})

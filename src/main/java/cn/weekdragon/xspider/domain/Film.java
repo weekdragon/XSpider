@@ -3,12 +3,15 @@ package cn.weekdragon.xspider.domain;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import cn.weekdragon.xspider.util.Constants;
 
@@ -42,9 +45,12 @@ public class Film {
 	@Column
 	private String prize;
 	@Column
+	private Integer views = 0;
+	@Column
 	private boolean isRecomended;
-	@ElementCollection
-	private List<String> sourceUrl;
+	
+	@OneToMany(cascade = CascadeType.ALL,orphanRemoval=true,fetch = FetchType.EAGER,mappedBy = "film")
+	private List<DownloadLinks> sourceUrl;
 	
 	@Column(nullable = false,updatable=false) // 映射为字段，值不能为空
 	@org.hibernate.annotations.CreationTimestamp()  // 由数据库自动创建时间
@@ -141,13 +147,14 @@ public class Film {
 	public void setRecomended(boolean isRecomended) {
 		this.isRecomended = isRecomended;
 	}
-	public List<String> getSourceUrl() {
+	
+	public List<DownloadLinks> getSourceUrl() {
 		return sourceUrl;
 	}
-	public void setSourceUrl(List<String> sourceUrl) {
+	
+	public void setSourceUrl(List<DownloadLinks> sourceUrl) {
 		this.sourceUrl = sourceUrl;
 	}
-	
 	public Timestamp getCreateTime() {
 		return createTime;
 	}
@@ -160,5 +167,11 @@ public class Film {
 				+ shortTitle + ", showTime=" + showTime + ", category=" + category + ", comment=" + comment
 				+ ", detailUrl=" + detailUrl + ", commentType=" + commentType + ", prize=" + prize + ", isRecomended="
 				+ isRecomended + ", sourceUrl=" + sourceUrl + "]";
+	}
+	public Integer getViews() {
+		return views;
+	}
+	public void setViews(Integer views) {
+		this.views = views;
 	}
 }
