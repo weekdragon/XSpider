@@ -76,8 +76,12 @@ function batFilmDelete(ids) {
 			success : function(data) {
 				if (data.code == 0) {
 					selects.each(function(i){
-						table.row($(this).parents('tr')).remove().draw();
+						table.row($(this).parents('tr')).remove();
 					})
+					table.draw();
+					console.log($("input[class='checkChildren']:checked").length);
+					console.log($(".checkChildren").length);
+					$("#checkall").prop('checked', $("input[class='checkChildren']:checked").length == $(".checkChildren").length);
 				}
 			}
 		});

@@ -49,7 +49,7 @@ public class Film {
 	@Column
 	private boolean isRecomended;
 	
-	@OneToMany(cascade = CascadeType.ALL,orphanRemoval=true,fetch = FetchType.EAGER,mappedBy = "film")
+	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "film")
 	private List<DownloadLinks> sourceUrl;
 	
 	@Column(nullable = false,updatable=false) // 映射为字段，值不能为空

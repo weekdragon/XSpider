@@ -223,13 +223,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			<script>
 				var table;
 				$(function() {
-					$("#checkall").click(function() {
-						var checked = $("#checkall").is(':checked');
-						$(".checkChildren").prop('checked', checked);
-					});
-					$(".checkChildren").click(function() {
-						$("#checkall").prop('checked', $("input[class='checkChildren']:checked").length == $(".checkChildren").length);
-					});
 					table = $("#film-table").DataTable(
 							{
 								"processing" : true,//刷新的那个对话框
@@ -279,11 +272,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
 											"sortable" : false,
 											"data" : "id",
 											"render" : function(data, type, full, meta) {
-												return '<a href="javascript:;" class="btn btn-danger" th:attr="data-href=\'film/' + data
-														+ '/to_delete\'" onClick="filmDelete(this)">删除</a>'
+												return '<a href="javascript:;" class="btn btn-danger" data-href=\'film/' + data
+														+ '/to_delete\' onClick="filmDelete(this)">删除</a>'
 											},
 										} ]
 							});
+					$("#checkall").click(function() {
+						var checked = $("#checkall").is(':checked');
+						$(".checkChildren").prop('checked', checked);
+					});
+					table.on("draw",function(){
+						$("#checkall").prop('checked', $("input[class='checkChildren']:checked").length == $(".checkChildren").length);
+						$(".checkChildren").click(function() {
+							$("#checkall").prop('checked', $("input[class='checkChildren']:checked").length == $(".checkChildren").length);
+						});
+					})
 				});
 			</script>
 		</div>
