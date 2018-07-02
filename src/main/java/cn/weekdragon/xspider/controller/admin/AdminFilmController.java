@@ -80,9 +80,9 @@ public class AdminFilmController {
 	@ResponseBody
 	@RequestMapping("/films")
 	public String listJsonFilms(@RequestParam(name = "draw") Integer draw, @RequestParam(name = "start") Integer start,
-			@RequestParam(name = "length") Integer length) {
+			@RequestParam(name = "length") Integer length,@RequestParam(name = "search[value]") String searchValue) {
 		Pageable pageable = new PageRequest(start/length, length);
-		Page<Film> listFilms = filmService.listFilms(pageable);
+		Page<Film> listFilms = filmService.listFilms(searchValue,pageable);
 		Long totalElements = listFilms.getTotalElements();
 		PageVo pageVo = new PageVo();
 		pageVo.setDraw(draw);
