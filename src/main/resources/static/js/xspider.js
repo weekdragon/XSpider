@@ -29,7 +29,12 @@ $(function() {
 		     }
 		 });
 	}
-	
+	$('#indexkeyword').bind('keypress',function(event){
+        if(event.keyCode == "13"){
+        		getBlogsByName(0, _pageSize);
+            return false;
+        }
+    });
 	// 分页
 	$.tbpage("#mainContainer", function (pageIndex, pageSize) {
 		getBlogsByName(pageIndex, pageSize);

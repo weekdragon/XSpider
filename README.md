@@ -2,6 +2,35 @@
 
 想要做网站，又苦于没有数据源，懒得管理，于是决定用爬虫。目前正在开发电影爬虫中。
 
+## 图片预览
+* 主页
+
+  ![screen_index](screenshot/screen_index.png)
+
+* 电影详情
+
+  ![screen_film_detail](screenshot/screen_film_detail.png)
+
+* 后端登录页面
+
+  ![screen_admin_login](screenshot/screen_admin_login.png)
+
+* 后端主页
+
+  ![screen_admin_index](screenshot/screen_admin_index.png)
+
+* 后端电影管理页面
+
+  ![screen_admin_film](screenshot/screen_admin_film.png)
+
+* 后端电影新增页面
+
+  ![screen_admin_film_add](screenshot/screen_admin_film_add.png)
+
+* 后端电影编辑页面
+
+  ![screen_admin_film_edit](screenshot/screen_admin_film_edit.png)
+
 ## 使用方式
 
 * 下载代码 git clone https://github.com/weekdragon/XSpider.git
@@ -11,7 +40,7 @@
 
 ## 架构
 
-本项目采用 SpringBoot 、SpringMVC、SpringData框架，页面数据采用 Thymeleaf 引擎渲染，数据库采用 MySQL。
+本项目采用 SpringBoot 、SpringMVC、SpringData 框架，页面展示主要用了 Bootstrap4.0，数据渲染采用 Thymeleaf 引擎，后端管理系统用了 AdminLTE 模版，支持 ajax 无刷新页面浏览，刷新页面后记住访问位置，数据库采用 MySQL 5.6。
 
 目前爬虫和WEB项目是结合的，爬虫服务作为 Component，通过定时任务每小时爬取网站的最新电影数据，并且做了去重处理。
 
@@ -24,20 +53,20 @@
 - [x] 电影资源抓取
 - [x] 电影分页显示
 - [x] 电影全文搜索
-- [ ] 电影点赞统计
-- [ ] 电影查看
+- [x] 后端登录以及 session 持久化
+- [x] 后端管理电影资源
+- [x] 电影详情页面查看
+- [x] 电影点击次数统计
 - [ ] 电影标签分类搜索
-- [ ] 展示自己的详情页面
 - [ ] 支持评论
 - [ ] 后端手动抓取
 - [ ] 后端日志查看
-- [ ] 后端管理电影资源
 - [ ] ...
 
 各位有什么好的意见或者使用中发现 bug 可以通过 issue 提出来，也可以直接给我发邮件
 
 
 
-# 许可证
+## 许可证
 
 [MIT](LICENSE "MIT")
